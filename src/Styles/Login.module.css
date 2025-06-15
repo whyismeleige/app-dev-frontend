@@ -1,0 +1,31 @@
+.container{
+    font-family: "Montserrat",sans-serif;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.textInput{
+    padding: 2px 2px 2px 6px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+.privacySection{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.container > button{
+    font-size: larger;
+}
+
+#loginButton{
+    padding: 10px;
+}
