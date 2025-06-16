@@ -1,0 +1,18 @@
+export const terms = [
+  "1. Welcome to [Your Website Name] (“we,” “our,” or “us”). These Terms and Conditions (“Terms”) govern your access to and use of our website [website URL] and any related services (the “Service”).",
+  "2. By accessing or using our website, you agree to be bound by these Terms. If you do not agree, please do not use the Service.",
+  "3. To access the website, you will be required to have college email (@josephscollege.ac.in).",
+  "4. When registering, you agree to provide accurate, current and completer information.",
+  "5. The User has the responsibity of maintaining the security of your password and account.",
+  "6. Notify us immediately of any unauthorized use or access of your account.",
+  "7. By using our website, you agree that we may collect, store, and use your personal information, including but not limited to: \n a. Name, email address, and contact information \n b. Profile data and preferences. \n c. Usage data and browsing behavior.",
+  "8. We use this information to: \n a. Personalize your experience \n b. Improve our website and services. \n c. Communicate with you (e.g., notifications, updates, offers).\n d. Comply with legal obligations.",
+  "9. We do not sell your personal information. However, we may share your data with: \n a.Trusted third-party service providers (e.g., cloud hosting, analytics, marketing). \n b.Authorities when required by law.",
+  "10. We use cookies and similar tracking technologies to enhance your experience. By using the website, you consent to our use of cookies as described in our [Cookie Policy].",
+  "11. You agree not to: \n a.Violate any laws or regulations. \n b.Infringe the rights of others. \n c.Distribute harmful software or content. \n d.Attempt to gain unauthorized access to the website or its systems.",
+  "12. All content on the website, including text, graphics, logos, and software, is our property or licensed to us and is protected by intellectual property laws. You may not reproduce, distribute, or use our content without written permission.",
+  "13. We reserve the right to suspend or terminate your access to the website if you violate these Terms or use the website in a harmful or unlawful manner.",
+  "14. The website is provided “as is” and “as available.” We do not guarantee that it will be error-free or uninterrupted. To the fullest extent permitted by law, we disclaim all warranties and will not be liable for any damages arising from your use of the website.",
+  "15. We may update these Terms at any time. You will be notified of significant changes, and continued use of the website after changes constitutes acceptance of the updated Terms.",
+  "16. If you have any questions about these Terms, please contact us at: [Your Contact Email]",
+];
