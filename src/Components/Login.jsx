@@ -3,9 +3,8 @@ import { FaUserAlt } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Iridescence from "../Utils/Iridescence";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { GoogleLogin } from "@react-oauth/google";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -62,10 +61,6 @@ export const LoginForm = () => {
           </div>
 
           <div className={styles.rememberForgot}>
-            <label className={styles.checkBoxLabel}>
-              <input type="checkbox" className={styles.checkBox} />
-              Remember me
-            </label>
             <a href="#" className={styles.aTag}>
               Forgot password?
             </a>
@@ -76,12 +71,17 @@ export const LoginForm = () => {
           </button>
 
           <div className={styles.registerLink}>
+            <div className={styles.googleWrapper}>
+              <GoogleLogin />
+            </div>
+            <div className={styles.dontHave}>
             <p className={styles.text}>
               Don't have an account?{" "}
               <a href="#" className={styles.aTag}>
                 Register now
               </a>
             </p>
+            </div>
           </div>
         </form>
       </div>
