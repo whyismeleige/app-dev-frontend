@@ -1,95 +1,92 @@
 import styles from "../Styles/Login.module.css";
+import { FaUserAlt } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+import Iridescence from "../Utils/Iridescence";
 import { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
-import { GoogleLogin } from "@react-oauth/google";
-import { terms } from "../termsandprivacy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
-export default function Login(props) {
+export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [tickBox, setTickBox] = useState(false);
-  const [termsState, setTermsState] = useState(false);
-  const [privacyState, setPrivacyState] = useState(false);
-
-  const responseMessage = (response) => console.log(response);
-  const errorMessage = (error) => console.log(error);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <>
-      {termsState && <TermsConditions onClose={() => setTermsState(false)} />}
-      {privacyState && <PrivacyPolicy onClose={() => setPrivacyState(false)} />}
-      <div className={styles.container}>
-        <form className={styles.form}>
-          <h1>Login Form</h1>
-          <div className={styles.emailSection}>
-            <span>Email</span>
+      <Iridescence
+        color={[1, 1, 1]}
+        mouseReact={false}
+        amplitude={0.1}
+        speed={1.0}
+      />
+
+      <div className={styles.wrap}>
+        <form action="">
+          <h1 className={styles.header}>Login</h1>
+
+          <div className={styles.inputBox}>
             <input
-              type="email"
-              className={styles.textInput}
-              id={styles.loginEmail}
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter Your College Email"
+              placeholder="Username"
+              className={styles.input}
               required
             />
+            <FaUserAlt className={styles.icon} />
           </div>
-          <div className={styles.passwordSection}>
-            <span>Password</span>
+
+          <div className={styles.inputBox}>
             <input
-              type="password"
-              className={styles.textInput}
-              id={styles.loginPassword}
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter Your Password"
+              placeholder="Password"
+              className={styles.input}
               required
             />
-            <span>Forget Password</span>
+            {!password ? (
+              <RiLockPasswordFill className={styles.icon} />
+            ) : showPassword ? (
+              <FaEye
+                className={styles.icon}
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <FaEyeSlash
+                className={styles.icon}
+                onClick={() => setShowPassword(true)}
+              />
+            )}
           </div>
-          <ReCAPTCHA sitekey={process.env.REACT_APP_SITE_KEY} required />
-          <button type="submit" id={styles.loginButton}>
-            Log In
+
+          <div className={styles.rememberForgot}>
+            <label className={styles.checkBoxLabel}>
+              <input type="checkbox" className={styles.checkBox} />
+              Remember me
+            </label>
+            <a href="#" className={styles.aTag}>
+              Forgot password?
+            </a>
+          </div>
+
+          <button type="submit" className={styles.loginButton}>
+            Login
           </button>
-          <span>- Or -</span>
-          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
-          <div>
-            <span>Don't have an account? </span>
-            <span>Sign Up</span>
+
+          <div className={styles.registerLink}>
+            <p className={styles.text}>
+              Don't have an account?{" "}
+              <a href="#" className={styles.aTag}>
+                Register now
+              </a>
+            </p>
           </div>
         </form>
       </div>
     </>
   );
-}
-
-const TermsConditions = (props) => {
-  const termMap = terms.map((term, index) => {
-    return (
-      <li key={index} className={styles.term}>
-        {term}
-      </li>
-    );
-  });
-  return (
-    <div className={styles.termsContainer}>
-      <FontAwesomeIcon
-        icon={faXmark}
-        className={styles.xmark}
-        onClick={props.onClose}
-      />
-      <ul className={styles.termsList}>{termMap}</ul>
-    </div>
-  );
 };
 
-const PrivacyPolicy = (props) => {
-  const policy = ["1.All the Data will be encrype"];
-  return (
-    <div className={styles.termsContainer}>
-      <FontAwesomeIcon icon={faXmark} className={styles.xmark} />
-      <ul className={styles.termsList}></ul>
-    </div>
-  );
-};
+export default LoginForm;

@@ -1,89 +1,115 @@
-.container {
-  font-family: "Montserrat", sans-serif;
-  position: relative;
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.textInput {
-  padding: 2px 2px 2px 6px;
-  border-radius: 10px;
-  font-size: 1.2rem;
-}
-
-.privacySection {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.passwordSection,.emailSection{
-    display: flex;
-    flex-direction: column;
-
-}
-
-.container > button {
-  font-size: larger;
-}
-
-#loginButton {
-  padding: 10px;
-}
-.modalBackdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-.termsContainer {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  max-width: 600px;
-  max-height: 80%;
-  overflow-y: auto;
-  background-color: white;
-  padding: 30px 20px;
+/* Larger login box */
+.wrap {
+  width: 800px;
+  height: auto;
+  background: transparent;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(60px);
+  box-shadow: 0 0 15px rgba(221, 215, 215, 0.3);
+  color: white;
   border-radius: 12px;
-  z-index: 1001;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  padding: 50px 60px;
 }
 
-.termsList {
-  list-style: decimal;
-  padding-left: 20px;
-  margin-top: 10px;
-  color: #444;
+/* Bigger title */
+.wrap .header {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.term {
-  margin-bottom: 10px;
+/* Adjust .input box spacing and height */
+.wrap .inputBox {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  margin: 35px 0;
 }
 
-.xmark {
+/* Bigger inputs */
+.inputBox .input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, 0.932);
+  border-radius: 40px;
+  font-size: 18px;
+  color: white;
+  padding: 20px 50px 20px 20px;
+}
+
+.inputBox .input::placeholder {
+  color: rgb(214, 210, 210);
+}
+
+/* Bigger icons */
+.inputBox .icon {
   position: absolute;
-  top: 15px;
   right: 20px;
-  cursor: pointer;
-  font-size: 24px;
-  color: #444;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
 }
 
-.conditions {
+/* More spacing for remember & forgot */
+.wrap .rememberForgot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  margin: -10px 0 25px;
+}
+
+.rememberForgot .checkBoxLabel .checkBox {
+  accent-color: white;
+  margin-right: 6px;
+}
+
+.rememberForgot .aTag {
+  color: white;
+  text-decoration: none;
+}
+
+.rememberForgot .aTag:hover {
+  text-decoration: underline;
+}
+
+/* Larger .loginButton */
+.wrap .loginButton {
+  width: 100%;
+  height: 55px;
+  background: grey;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  color: #007bff;
+  font-size: 20px;
+  color: white;
+  font-weight: 700;
+  transition: background 0.3s;
+}
+
+.wrap .loginButton:hover {
+  background: #5a5a5a;
+}
+
+/* Bigger register link */
+.wrap .registerLink {
+  font-size: 16px;
+  text-align: center;
+  margin: 30px 0 15px;
+}
+
+.registerLink .text .aTag {
+  text-align: right;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.registerLink .text .aTag:hover {
   text-decoration: underline;
 }
