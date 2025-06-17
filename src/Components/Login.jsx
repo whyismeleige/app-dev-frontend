@@ -2,7 +2,7 @@ import styles from "../Styles/Login.module.css";
 import { FaUserAlt } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Iridescence from "../Utils/Iridescence";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 
@@ -11,14 +11,13 @@ export const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const stableBackground = useRef(<Iridescence color={[1, 1, 1]}
+    mouseReact={false}
+    amplitude={0.1}
+    speed={1.0} />)
   return (
     <>
-      <Iridescence
-        color={[1, 1, 1]}
-        mouseReact={false}
-        amplitude={0.1}
-        speed={1.0}
-      />
+      {stableBackground.current}
 
       <div className={styles.wrap}>
         <form action="">
@@ -26,7 +25,7 @@ export const LoginForm = () => {
 
           <div className={styles.inputBox}>
             <input
-              type="text"
+              type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Username"
@@ -72,15 +71,15 @@ export const LoginForm = () => {
 
           <div className={styles.registerLink}>
             <div className={styles.googleWrapper}>
-              <GoogleLogin />
+              <GoogleLogin id={styles.googleButton} />
             </div>
             <div className={styles.dontHave}>
-            <p className={styles.text}>
-              Don't have an account?{" "}
-              <a href="#" className={styles.aTag}>
-                Register now
-              </a>
-            </p>
+              <p className={styles.text}>
+                Don't have an account?{" "}
+                <a href="#" className={styles.aTag}>
+                  Register now
+                </a>
+              </p>
             </div>
           </div>
         </form>

@@ -55,9 +55,9 @@
 }
 
 /* More spacing for remember & forgot */
-.wrap .rememberForgot {
+.rememberForgot {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   font-size: 12px;
   margin: -10px 0 25px;
 }
@@ -81,7 +81,7 @@
   width: 100%;
   height: 55px;
   background: transparent;
-  border: none;
+  border: 2px solid white;
   outline: none;
   border-radius: 40px;
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
@@ -121,9 +121,14 @@
 .googlewrapper{
   margin-bottom: 20px;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  border-radius: 40px;
 }
 
 .dontHave{
   margin-top: 20px;
+}
+
+.googleButton{
+  border-radius: 40px;
 }
