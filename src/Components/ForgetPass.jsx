@@ -1,17 +1,18 @@
-import styles from "../Styles/Login.module.css";
-import { FaUserAlt } from "react-icons/fa";
+import styles from "../Styles/ForgetPass.module.css";
+import { IoMail } from "react-icons/io5";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Iridescence from "../Utils/Iridescence";
 import { useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 
-export const LoginForm = () => {
+export const ForgetPass = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showOTP, setShowOTP] = useState(false);
 
-  const stableBackground = useRef(<Iridescence color={[1, 1, 1]}
+  const stableBackground = useRef(<Iridescence color={[2, 2, 1]}
     mouseReact={false}
     amplitude={0.1}
     speed={1.0} />)
@@ -21,20 +22,21 @@ export const LoginForm = () => {
 
       <div className={styles.wrap}>
         <form action="">
-          <h1 className={styles.header}>Login</h1>
+          <h1 className={styles.header}>Forgot password?</h1>
 
-          <div className={styles.inputBox}>
+          { !showOTP ? 
+            <div className={styles.inputBox}>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Username"
+              placeholder="Enter email"
               className={styles.input}
               required
             />
-            <FaUserAlt className={styles.icon} />
+            <IoMail className={styles.icon} />
           </div>
-
+          :
           <div className={styles.inputBox}>
             <input
               type={showPassword ? "text" : "password"}
@@ -58,34 +60,21 @@ export const LoginForm = () => {
               />
             )}
           </div>
+          }
 
-          <div className={styles.rememberForgot}>
-            <a href="/#" className={styles.aTag}>
-              Forgot password?
+          <div className={styles.backLogin}>
+            <a href="" className={styles.aTag}>
+              Go back to Login
             </a>
           </div>
 
-          <button type="submit" className={styles.loginButton}>
-            Login
+          <button className={styles.loginButton} onClick={() => setShowOTP(!showOTP)}>
+            Send OTP
           </button>
-
-          <div className={styles.registerLink}>
-            <div className={styles.googlewrapper}>
-              <GoogleLogin id={styles.googleButton} />
-            </div>
-            <div className={styles.dontHave}>
-              <p className={styles.text}>
-                Don't have an account?{" "}
-                <a href="#" className={styles.aTag}>
-                  Register now
-                </a>
-              </p>
-            </div>
-          </div>
         </form>
       </div>
     </>
   );
 };
 
-export default LoginForm;
+export default ForgetPass;
