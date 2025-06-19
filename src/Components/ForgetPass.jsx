@@ -12,7 +12,7 @@ export const ForgetPass = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
 
-  const stableBackground = useRef(<Iridescence color={[2, 2, 1]}
+  const stableBackground = useRef(<Iridescence color={getColorSchema()}
     mouseReact={false}
     amplitude={0.1}
     speed={1.0} />)
@@ -42,9 +42,10 @@ export const ForgetPass = () => {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder="OTP"
               className={styles.input}
               required
+              maxLength={6}
             />
             {!password ? (
               <RiLockPasswordFill className={styles.icon} />
@@ -76,5 +77,12 @@ export const ForgetPass = () => {
     </>
   );
 };
+
+const getColorSchema = () => {
+  const first = Math.ceil(Math.random() * 4);
+  const second = Math.ceil(Math.random() * 4);
+  const third = Math.ceil(Math.random() * 4);
+  return [first,second,third]; 
+}
 
 export default ForgetPass;
