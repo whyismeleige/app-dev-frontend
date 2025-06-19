@@ -49,7 +49,20 @@ void main() {
 }
 `;
 
-export default function Iridescence({
+export default function Irisdescence(){
+  const stableBackground = useRef(<Graphic color={[1, 1, 1]}
+    mouseReact={false}
+    amplitude={0.1}
+    speed={1.0} />)
+  return (
+    <>
+      {stableBackground.current}
+    </>
+  )
+}
+
+
+function Graphic({
   color = [0.6, 0.0, 1.0],  // Purple
   speed = 1.0,
   amplitude = 0.1,

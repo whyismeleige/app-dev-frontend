@@ -2,9 +2,9 @@ import styles from "../Styles/ForgetPass.module.css";
 import { IoMail } from "react-icons/io5";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Iridescence from "../Utils/Iridescence";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { GoogleLogin } from "@react-oauth/google";
+import { Link } from "react-router-dom";
 
 export const ForgetPass = () => {
   const [email, setEmail] = useState("");
@@ -12,13 +12,9 @@ export const ForgetPass = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
 
-  const stableBackground = useRef(<Iridescence color={getColorSchema()}
-    mouseReact={false}
-    amplitude={0.1}
-    speed={1.0} />)
   return (
     <>
-      {stableBackground.current}
+      <Iridescence/>
 
       <div className={styles.wrap}>
         <form action="">
@@ -64,9 +60,9 @@ export const ForgetPass = () => {
           }
 
           <div className={styles.backLogin}>
-            <a href="" className={styles.aTag}>
+            <Link to="/" className={styles.aTag}>
               Go back to Login
-            </a>
+            </Link>
           </div>
 
           <button className={styles.loginButton} onClick={() => setShowOTP(!showOTP)}>
