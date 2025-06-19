@@ -7,17 +7,31 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
 
+const SERVER_URL = "http://localhost:8080/";
+
+async function loginUser(credentials) {
+  return fetch(`${SERVER_URL}api/auth/signin`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+}
+
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e) => {
-    
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await loginUser({email,password});
+    console.log(response);
+  };
   return (
     <>
-      <Iridescence/>
+      <Iridescence />
 
       <div className={styles.wrap}>
         <form onSubmit={handleSubmit}>
