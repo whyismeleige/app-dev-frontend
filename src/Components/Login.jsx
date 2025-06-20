@@ -5,7 +5,7 @@ import Iridescence from "../Utils/Iridescence";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { GoogleLogin } from "@react-oauth/google";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SERVER_URL = "http://localhost:8080/";
 
@@ -23,11 +23,14 @@ export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await loginUser({email,password});
-    console.log(response);
+    const response = await loginUser({ email, password });
+    if (response.token) {
+      navigate("/verify-email", { state: {email: email }});
+    }
   };
   return (
     <>

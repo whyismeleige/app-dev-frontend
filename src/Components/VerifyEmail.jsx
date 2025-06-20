@@ -1,30 +1,28 @@
 import styles from "../Styles/verify.module.css";
 import Iridescence from "../Utils/Iridescence";
-import { useRef, useState } from "react";
-import { GoogleLogin } from "@react-oauth/google";
-
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 export  const VerifyEmail = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [otp,setOtp] = useState("");
 
-  const stableBackground = useRef(<Iridescence color={[1, 1, 1]}
-    mouseReact={false}
-    amplitude={0.1}
-    speed={1.0} />)
+  const location = useLocation();
+  console.log(location.state.email);
+
+  const handleSubmit = () => {
+    
+  }
   return (
     <>
-      {stableBackground.current}
-
+      <Iridescence/>
       <div className={styles.wrap}>
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <h1 className={styles.header}>Verify Email</h1>
 
           <div className={styles.inputBox}>
             <input
-              type="OTP"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
               placeholder="Enter the OTP"
               className={styles.input}
               required
