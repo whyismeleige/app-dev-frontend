@@ -1,17 +1,28 @@
-import Login from './Components/Login'
-import ForgetPass from './Components/ForgetPass'
-import VerifyEmail from './Components/VerifyEmail';
+import Login from "./Components/Login";
+import ForgetPass from "./Components/ForgetPass";
+import UserHome from "./Components/UserHome";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { useState } from "react";
 
-import {Router,Routes,Route, BrowserRouter} from 'react-router-dom';
-
-export default function App(){
-  return(
+export default function App() {
+  const [clientToken, setClientToken] = useState(
+    localStorage.getItem("clientToken")
+  );
+  const setToken = (token) => {
+    setClientToken(token);
+    localStorage.setItem("clientToken", token);
+  };
+  return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login/>}/>
-        <Route path='/forget-password' element={<ForgetPass/>}/>
-        <Route path='/verify-email' element={<VerifyEmail/>}></Route>
+        <Route
+          path="/"
+          element={
+            clientToken ? <UserHome /> : <Login setClientToken={setToken} />
+          }
+        />
+        <Route path="/forget-password" element={<ForgetPass />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

@@ -4,12 +4,13 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import Iridescence from "../Utils/Iridescence";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Loader from "../Utils/Loader";
 
-const SERVER_URL = "http://localhost:8080/";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const sendOTP = async (email) => {
-  return fetch(`${SERVER_URL}/`, {
+  return fetch(`${SERVER_URL}/api/auth/send-otp`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -19,42 +20,57 @@ const sendOTP = async (email) => {
 };
 
 const verifyOTP = async (credentials) => {
-  return fetch(`${SERVER_URL}/`, {
+  return fetch(`${SERVER_URL}/api/auth/verify-otp`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(email),
+    body: JSON.stringify(credentials),
   }).then((data) => data.json());
 };
 
-const changePassword = async (password) => {
-  return fetch(`${SERVER_URL}/`, {
+const changePassword = async (credentials, token) => {
+  return fetch(`${SERVER_URL}/api/auth/change-password`, {
     method: "PUT",
     headers: {
       "content-type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(password),
+    body: JSON.stringify(credentials),
   }).then((data) => data.json());
 };
 
 export default function ForgetPass() {
-  const [email, setEmail] = useState("");
+  const [hallTicketNo, setHallTicketNo] = useState("");
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, toggleShowPassword] = useState(false);
   const [formStep, setFormStep] = useState(1);
   const [confirmPass, setConfirmPass] = useState("");
+  const [token, setToken] = useState();
+  const [loading, toggleLoading] = useState(false);
+
+  let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    toggleLoading(true);
+    if (formStep === 3 && confirmPass !== password) return;
+    const email = `${hallTicketNo}@josephscollege.ac.in`;
     const response =
-      (await stepForm) === 1
-        ? sendOTP({ email })
-        : stepForm === 2
-        ? verifyOTP({ email, otp })
-        : changePassword({ password });
-        
+      formStep === 1
+        ? await sendOTP({ email })
+        : formStep === 2
+        ? await verifyOTP({ email, otp })
+        : await changePassword({ email, password }, token);
+    toggleLoading(false);
+    if (response.error) return;
+    if (response.token) setToken(response.token);
+    if (formStep === 3) {
+      navigate("/");
+      return;
+    }
+    setFormStep((prevStep) => prevStep + 1);
   };
   return (
     <>
@@ -70,11 +86,12 @@ export default function ForgetPass() {
           </h1>
           {formStep === 1 && (
             <InputField
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter Email"
+              type="text"
+              value={hallTicketNo}
+              onChange={(e) => setHallTicketNo(e.target.value)}
+              placeholder="Enter Hall Ticket No"
               iconType="mail"
+              maxLength="12"
             />
           )}
           {formStep === 2 && (
@@ -96,7 +113,7 @@ export default function ForgetPass() {
                 placeholder="New Password"
                 iconType="password"
                 showPassword={showPassword}
-                toggleShowPassword={toggleShowPassword}
+                toggleShowPassword={() => toggleShowPassword(!showPassword)}
               />
               <InputField
                 type="password"
@@ -105,7 +122,7 @@ export default function ForgetPass() {
                 placeholder="Confirm Password"
                 iconType="password"
                 showPassword={showPassword}
-                toggleShowPassword={toggleShowPassword}
+                toggleShowPassword={() => toggleShowPassword(!showPassword)}
               />
             </>
           )}
@@ -116,12 +133,19 @@ export default function ForgetPass() {
             </Link>
           </div>
 
-          <button className={styles.loginButton}>
-            {formStep === 1
-              ? "Send OTP"
-              : formStep === 2
-              ? "Verify OTP"
-              : "Change Password"}
+          <button
+            className={styles.loginButton}
+            disabled={loading ? true : false}
+          >
+            {loading ? (
+              <Loader />
+            ) : formStep === 1 ? (
+              "Send OTP"
+            ) : formStep === 2 ? (
+              "Verify OTP"
+            ) : (
+              "Change Password"
+            )}
           </button>
         </form>
       </div>
@@ -129,12 +153,12 @@ export default function ForgetPass() {
   );
 }
 
-const getColorSchema = () => {
-  const first = Math.ceil(Math.random() * 4);
-  const second = Math.ceil(Math.random() * 4);
-  const third = Math.ceil(Math.random() * 4);
-  return [first, second, third];
-};
+// const getColorSchema = () => {
+//   const first = Math.ceil(Math.random() * 4);
+//   const second = Math.ceil(Math.random() * 4);
+//   const third = Math.ceil(Math.random() * 4);
+//   return [first, second, third];
+// };
 
 const InputField = (props) => {
   return (

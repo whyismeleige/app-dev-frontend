@@ -1,85 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-/* Larger login box */
 .wrap {
-  width: 400px;
-  height: auto;
+  width: 100%;
+  max-width: 400px;
   background: transparent;
   border: 2px solid rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(30px);
   box-shadow: 0 0 15px rgba(221, 215, 215, 0.3);
   color: white;
   border-radius: 12px;
-  padding: 50px 60px;
+  padding: 40px 30px;
 }
 
-/* Bigger title */
+/* Title */
 .wrap .header {
-  font-size: 48px;
+  font-size: 40px;
   text-align: center;
   margin-bottom: 30px;
 }
 
-/* Adjust .input box spacing and height */
+/* Input container */
 .wrap .inputBox {
   position: relative;
   width: 100%;
-  height: 40px;
-  margin: 35px 0;
+  margin: 25px 0;
 }
 
-/* Bigger inputs */
+/* Input field */
 .inputBox .input {
   width: 100%;
-  height: 100%;
+  height: 50px;
   background: transparent;
   outline: none;
   border: 2px solid rgba(255, 255, 255, 0.932);
   border-radius: 40px;
   font-size: 14px;
   color: white;
-  padding: 20px 50px 20px 20px;
+  padding: 0 50px 0 20px;
 }
 
 .inputBox .input::placeholder {
   color: rgb(214, 210, 210);
 }
 
-/* Bigger icons */
+/* Icon */
 .inputBox .icon {
   position: absolute;
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 20px;
+  cursor: pointer;
 }
 
-/* More spacing for remember & forgot */
+/* Remember & Forgot */
 .rememberForgot {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   font-size: 12px;
   margin: -10px 0 25px;
+  flex-wrap: wrap;
 }
 
-.rememberForgot .checkBoxLabel .checkBox {
+.rememberForgot .checkBoxLabel {
+  display: flex;
+  align-items: center;
+}
+
+.checkBox {
   accent-color: white;
   margin-right: 6px;
 }
 
-.rememberForgot .aTag {
+.aTag {
   color: white;
   text-decoration: none;
 }
 
-.rememberForgot .aTag:hover {
+.aTag:hover {
   text-decoration: underline;
 }
 
-/* Larger .loginButton */
+/* Login button */
 .wrap .loginButton {
   width: 100%;
-  height: 55px;
+  height: 50px;
   background: transparent;
   border: 2px solid white;
   outline: none;
@@ -88,7 +94,7 @@
   cursor: pointer;
   font-size: 16px;
   color: white;
-  font-weight: 550;
+  font-weight: 600;
   transition: background 0.3s;
 }
 
@@ -96,39 +102,81 @@
   background: #9400f7;
 }
 
-/* Bigger register link */
+/* Register link */
 .wrap .registerLink {
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
-  margin: 30px 0 15px;
+  margin: 25px 0 10px;
+}
+
+.registerLink .text {
+  font-size: 12px;
 }
 
 .registerLink .text .aTag {
-  text-align: right;
   color: white;
   text-decoration: none;
   font-weight: 600;
-  font-size: 12px;}
+}
 
 .registerLink .text .aTag:hover {
   text-decoration: underline;
 }
 
-.registerLink .text{
-  font-size: 12px;
-}
-
-.googlewrapper{
-  justify-content: center;
+/* Google button wrapper */
+.googlewrapper {
   display: flex;
+  justify-content: center;
   align-items: center;
   border-radius: 40px;
-}
-
-.dontHave{
   margin-top: 20px;
 }
 
-.googleButton{
+.googleButton {
   border-radius: 40px;
+  padding: 10px 20px;
+  background-color: white;
+  color: black;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+/* Extra text below */
+.dontHave {
+  margin-top: 20px;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .wrap {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+
+  .wrap .header {
+    font-size: 32px;
+  }
+
+  .wrap .loginButton {
+    font-size: 14px;
+    height: 45px;
+  }
+
+  .inputBox .input {
+    font-size: 13px;
+    padding: 0 45px 0 18px;
+  }
+
+  .inputBox .icon {
+    font-size: 18px;
+  }
+
+  .rememberForgot {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+  }
 }

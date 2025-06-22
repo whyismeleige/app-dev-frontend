@@ -1,36 +1,58 @@
 import styles from "../Styles/Login.module.css";
-import { FaUserAlt } from "react-icons/fa";
+import { IoMail } from "react-icons/io5";
 import { RiLockPasswordFill } from "react-icons/ri";
 import Iridescence from "../Utils/Iridescence";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { GoogleLogin } from "@react-oauth/google";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Loader from "../Utils/Loader";
 
-const SERVER_URL = "http://localhost:8080/";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-async function loginUser(credentials) {
-  return fetch(`${SERVER_URL}api/auth/signin`, {
+const loginUser = async (credentials) => {
+  return fetch(`${SERVER_URL}/api/auth/signin`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify(credentials),
   }).then((data) => data.json());
-}
+};
 
-export const LoginForm = () => {
-  const [email, setEmail] = useState("");
+const verifyOtp = async (credentials) => {
+  return fetch(`${SERVER_URL}/api/auth/verify-otp`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+};
+
+export const LoginForm = (props) => {
+  const [hallTicketNo, setHallTicketNo] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const [showPassword, toggleShowPassword] = useState(false);
+  const [formStep, setFormStep] = useState(1);
+  const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await loginUser({ email, password });
+    setLoading(true);
+    const email = `${hallTicketNo}@josephscollege.ac.in`;
+    const response =
+      formStep === 1
+        ? await loginUser({ email, password })
+        : await verifyOtp({ email, otp });
+    console.log(response);
+    setLoading(false);
+    if (response.error) return;
     if (response.token) {
-      navigate("/verify-email", { state: {email: email }});
+      props.setClientToken(response.token);
+      return;
     }
+    setFormStep((prevStep) => prevStep + 1);
   };
   return (
     <>
@@ -38,67 +60,84 @@ export const LoginForm = () => {
 
       <div className={styles.wrap}>
         <form onSubmit={handleSubmit}>
-          <h1 className={styles.header}>Login</h1>
-
-          <div className={styles.inputBox}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Username"
-              className={styles.input}
-              required
-            />
-            <FaUserAlt className={styles.icon} />
-          </div>
-
-          <div className={styles.inputBox}>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className={styles.input}
-              required
-            />
-            {!password ? (
-              <RiLockPasswordFill className={styles.icon} />
-            ) : showPassword ? (
-              <FaEye
-                className={styles.icon}
-                onClick={() => setShowPassword(false)}
+          <h1 className={styles.header}>
+            {formStep === 1 ? "Login" : "Verify OTP"}
+          </h1>
+          {formStep === 1 && (
+            <>
+              <InputField
+                type="text"
+                value={hallTicketNo}
+                onChange={(e) => setHallTicketNo(e.target.value)}
+                placeholder="Enter Hall Ticket No"
+                iconType="mail"
+                maxLength="12"
               />
+              <InputField
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter Password"
+                iconType="password"
+                showPassword={showPassword}
+                toggleShowPassword={() => toggleShowPassword(!showPassword)}
+              />
+            </>
+          )}
+          {formStep === 2 && (
+            <InputField
+              type="text"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              placeholder="Enter OTP"
+              maxLength={6}
+              iconType="password"
+            />
+          )}
+
+          <div className={styles.rememberForgot}>
+            {formStep === 1 ? (
+              <Link to="forget-password" className={styles.aTag}>
+                Forgot password?
+              </Link>
             ) : (
-              <FaEyeSlash
-                className={styles.icon}
-                onClick={() => setShowPassword(true)}
-              />
+              <Link
+                to="/"
+                onClick={() => setFormStep(1)}
+                className={styles.aTag}
+              >
+                Go back to Login
+              </Link>
             )}
           </div>
 
-          <div className={styles.rememberForgot}>
-            <Link to="forget-password" className={styles.aTag}>
-              Forgot password?
-            </Link>
-          </div>
-
-          <button type="submit" className={styles.loginButton}>
-            Login
+          <button
+            type="submit"
+            className={styles.loginButton}
+            disabled={loading ? true : false}
+          >
+            {loading ? <Loader /> : formStep === 1 ? "Login" : "Verify OTP"}
           </button>
 
-          <div className={styles.registerLink}>
-            <div className={styles.googlewrapper}>
-              <GoogleLogin id={styles.googleButton} />
+          {formStep === 1 && (
+            <div className={styles.registerLink}>
+              {/* <div className={styles.googlewrapper}>
+                <GoogleLogin
+                  id={styles.googleButton}
+                  onSuccess={loginGmail}
+                  onError={() => console.log("Login Failed")}
+                />
+              </div> */}
+              <div className={styles.dontHave}>
+                <p className={styles.text}>
+                  Don't have an account?{" "}
+                  <Link to="/" className={styles.aTag}>
+                    Register now
+                  </Link>
+                </p>
+              </div>
             </div>
-            <div className={styles.dontHave}>
-              <p className={styles.text}>
-                Don't have an account?{" "}
-                <Link to="/" className={styles.aTag}>
-                  Register now
-                </Link>
-              </p>
-            </div>
-          </div>
+          )}
         </form>
       </div>
     </>
@@ -106,3 +145,41 @@ export const LoginForm = () => {
 };
 
 export default LoginForm;
+
+const InputField = (props) => {
+  return (
+    <div className={styles.inputBox}>
+      <input
+        type={
+          props.showPassword !== undefined
+            ? props.showPassword
+              ? "text"
+              : "password"
+            : props.type
+        }
+        value={props.value}
+        onChange={props.onChange}
+        placeholder={props.placeholder}
+        className={styles.input}
+        maxLength={props.maxLength || undefined}
+        required
+      />
+      {!props.value ? (
+        props.iconType === "mail" ? (
+          <IoMail className={styles.icon} />
+        ) : (
+          <RiLockPasswordFill className={styles.icon} />
+        )
+      ) : props.showPassword !== undefined ? (
+        props.showPassword ? (
+          <FaEye className={styles.icon} onClick={props.toggleShowPassword} />
+        ) : (
+          <FaEyeSlash
+            className={styles.icon}
+            onClick={props.toggleShowPassword}
+          />
+        )
+      ) : null}
+    </div>
+  );
+};
