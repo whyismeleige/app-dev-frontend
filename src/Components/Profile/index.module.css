@@ -1,0 +1,75 @@
+.profileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  box-sizing: border-box;
+}
+
+.profileCard {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.profileAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 16px;
+  object-fit: cover;
+}
+
+.profileName {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.profileRollno,
+.profileEmail,
+.profileDepartment,
+.profileAttendance {
+  font-size: 14px;
+  margin: 3px 0;
+  color: #555;
+}
+
+/* sexy ahh Responsive tweaks for tablets and desktops */
+
+@media (min-width: 600px) {
+  .profileCard {
+    padding: 30px;
+  }
+
+  .profileAvatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profileName {
+    font-size: 24px;
+  }
+
+  .profileRollno,
+  .profileEmail,
+  .profileDepartment,
+  .profileAttendance {
+    font-size: 16px;
+  }
+}
+
+/* High-resolution desktops or larger screens */
+
+@media (min-width: 1024px) {
+  .profileCard {
+    max-width: 500px;
+  }
+}
