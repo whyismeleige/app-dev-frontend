@@ -1,11 +1,11 @@
-import styles from "../Styles/Login.module.css";
+import styles from "./index.module.css";
 import { IoMail } from "react-icons/io5";
 import { RiLockPasswordFill } from "react-icons/ri";
-import Iridescence from "../Utils/Iridescence";
+import Iridescence from "../../Utils/Iridescence";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Loader from "../Utils/Loader";
+import Loader from "../../Utils/Loader";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 

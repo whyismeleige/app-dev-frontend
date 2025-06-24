@@ -1,7 +1,7 @@
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
 
-import styles from './Iridescense.module.css'
+import styles from './index.module.css'
 
 const vertexShader = `
 attribute vec2 uv;
