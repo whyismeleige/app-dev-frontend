@@ -1,9 +1,10 @@
-import Profile from "./Components/Profile";
+// import Profile from "./Components/Profile";
 // import Login from './Components/Login';
 // import ForgetPass from "./Components/ForgetPass";
 // import UserHome from "./Components/UserHome";
 // import { Routes, Route, BrowserRouter } from "react-router-dom";
 // import { useState } from "react";
+import UserDashboard from "./Components/UserDashboard";
 
 export default function App() {
   // const [clientToken, setClientToken] = useState(
@@ -15,7 +16,8 @@ export default function App() {
   // };
 
   return (
-    <Profile />
+    <UserDashboard/>
+    // <Profile />
     // <BrowserRouter>
     //   <Routes>
     //     <Route
