@@ -4,7 +4,8 @@
 // import UserHome from "./Components/UserHome";
 // import { Routes, Route, BrowserRouter } from "react-router-dom";
 // import { useState } from "react";
-import UserDashboard from "./Components/UserDashboard";
+// import UserDashboard from "./Components/UserDashboard";
+import ChatBot from "./Components/ChatBot"
 
 export default function App() {
   // const [clientToken, setClientToken] = useState(
@@ -16,7 +17,8 @@ export default function App() {
   // };
 
   return (
-    <UserDashboard/>
+    <ChatBot/>
+    // <UserDashboard/>
     // <Profile />
     // <BrowserRouter>
     //   <Routes>
