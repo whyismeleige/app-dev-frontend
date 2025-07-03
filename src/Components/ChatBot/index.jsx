@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./index.module.css";
-import Iridescense from "../../Utils/Iridescence"
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([]);
@@ -36,7 +35,6 @@ export default function ChatBot() {
 
   return (
     <>
-    <Iridescense/>
     <div className={styles.chatbotWrapper}>
       <button onClick={toggleChat} className={styles.toggleButton}>
         {isOpen ? "−" : "💬"}
