@@ -1,23 +1,28 @@
-import styles from './index.module.css';
+import styles from "./index.module.css";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
+  return (
+    <>
+      <nav className={styles.topNav}>
+        <div className={styles.navLogo}>MyApp</div>
+        <ul className={styles.navLinks}>
+          <li className={styles.navLinksLine}>
+            <Link to="profile" className={styles.navLinksAnchor}>Profile</Link>
+          </li>
+          <li className={styles.navLinksLine}>
+            <Link to="dashboard" className={styles.navLinksAnchor}>Dashboard</Link>
+          </li>
+          <li className={styles.materialDropdown}>
+            <span className={styles.navLinksSpan}>Material</span>
+          </li>
+          <li className={styles.navLinksLine}>
+            <Link to="attendance" className={styles.navLinksAnchor}>Attendance</Link>
+          </li>
+        </ul>
+      </nav>
 
-    return (
-        <>
-            <nav className={styles.topNav}>
-                <div className={styles.navLogo}>MyApp</div>
-                <ul className={styles.navLinks}>
-                    <li className={styles.navLinksLine}><a className={styles.navLinksAnchor}>Profile</a></li>
-                    <li className={styles.navLinksLine}><a className={styles.navLinksAnchor}>Dashboard</a></li>
-                    <li className={styles.materialDropdown}>
-                        <span className={styles.navLinksSpan}>Material</span>
-
-                    </li>
-                    <li className={styles.navLinksLine}><a className={styles.navLinksAnchor}>Attendance</a></li>
-                </ul>
-            </nav>
-
-            {/* Preview on hover
+      {/* Preview on hover
             {hoveredSemester && !fullscreenSem && (
                 <div className={styles.semPreview}>
                     <h4>{hoveredSemester} Materials</h4>
@@ -32,7 +37,7 @@ export default function NavBar() {
                 </div>
             )} */}
 
-            {/* Fullscreen on click
+      {/* Fullscreen on click
             {fullscreenSem && (
                 <div className={styles.materialFullscreen} onClick={() => setFullscreenSem(null)}>
                     <h3>{fullscreenSem}</h3>
@@ -47,6 +52,6 @@ export default function NavBar() {
                     <small>Click anywhere to close</small>
                 </div>
             )} */}
-        </>
-    );
-};
+    </>
+  );
+}

@@ -2,28 +2,49 @@ import styles from './index.module.css';
 
 export default function Profile() {
   const user = {
-    Name: 'Bobby Anthene',
-    Email: '121423408057@josephscollege.ac.in',
-    Rollno: '121423408057',
-    avatar: '/avatar.png', // Update this to a real image path
-    Department: 'Management',
-    Attendance: '75%',
+    name: "K Vyshnavi",
+    roll: "121423408008",
+    email: "121423408008@josephscollege.ac.in",
+    dept: "BBA-IT",
+    semester: "5th",
+    attendance: "99%",
+    gpa: "9.11",
   };
 
   return (
     <div className={styles.profileContainer}>
-      <div className={styles.profileCard}>
-        <img
-          src={user.avatar}
-          alt="User Avatar"
-          className={styles.profileAvatar}
-        />
-        <h2 className={styles.profileName}>{user.Name}</h2>
-        <p className={styles.profileRollno}>{user.Rollno}</p>
-        <p className={styles.profileEmail}>{user.Email}</p>
-        <p className={styles.profileDepartment}>{user.Department}</p>
-        <p className={styles.profileAttendance}>{user.Attendance}</p>
+      <h1 className={styles.profileHeading}>Student Profile</h1>
+
+      <div className={styles.profileLayout}>
+        <div className={styles.profileCard}>
+          <div className={styles.profilePicWrapper}>
+            
+          </div>
+
+          <div className={styles.profileInfo}>
+            <h2>{user.name}</h2>
+            <p>Roll No: {user.roll}</p>
+            <p>Email: {user.email}</p>
+            <p>Department: {user.dept}</p>
+            <p>Semester: {user.semester}</p>
+          </div>
+        </div>
+
+        <div className={styles.attendanceCardStatBox}>
+          <h3>Attendance</h3>
+          <p>{user.attendance}</p>
+        </div>
+
+        <div className={styles.gpaCardStatBox}>
+          <h3>GPA</h3>
+          <p>{user.gpa}</p>
+        </div>
+      </div>
+
+      <div className={styles.profileActions}>
+        <button>Edit Profile</button>
       </div>
     </div>
   );
 }
+

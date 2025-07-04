@@ -15,19 +15,17 @@ export default function App() {
   };
 
   return (
-    <UserHome/>
-    // <UserDashboard/>
-    // <Profile />
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route
-    //       path="/"
-    //       element={
-    //         clientToken ? <UserHome /> : <Login setClientToken={setToken} />
-    //       }
-    //     />
-    //     <Route path="/forget-password" element={<ForgetPass />} />
-    //   </Routes>
-    // </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="*"
+          // element={
+          //   clientToken ? <UserHome /> : <Login setClientToken={setToken} />
+          // }
+          element={<UserHome/>}
+        />
+        <Route path="/forget-password" element={<ForgetPass />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
