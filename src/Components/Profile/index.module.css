@@ -2,126 +2,68 @@
   position: relative;
   min-height: 100vh;
   padding: 40px 20px;
+  background: url("https://w0.peakpx.com/wallpaper/99/246/HD-wallpaper-black-background-light-violet-color-graphics-design-theme-s.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   text-align: center;
   overflow: hidden;
   z-index: 0;
-  background: url(https://w0.peakpx.com/wallpaper/99/246/HD-wallpaper-black-background-light-violet-color-graphics-design-theme-s.jpg) ;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-  color: white; /* if image is dark */
 }
 
 /* Animations */
 @keyframes slideInFromLeft {
-  0% {
+  from {
     opacity: 0;
     transform: translateX(-100%);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
 @keyframes slideInFromRight {
-  0% {
+  from {
     opacity: 0;
     transform: translateX(100%);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
 @keyframes slideInFromTop {
-  0% {
+  from {
     opacity: 0;
     transform: translateY(-100%);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 @keyframes slideInFromBottom {
-  0% {
+  from {
     opacity: 0;
     transform: translateY(100%);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Profile Heading */
 .profileHeading {
   font-size: 2.5rem;
   color: #ffffff;
   margin-bottom: 40px;
+  opacity: 0;
   animation: slideInFromTop 1s ease-out forwards;
   animation-delay: 0.2s;
-  opacity: 0;
-}
-
-/* Glassmorphism styles for cards */
-.profileCard,
-.attendanceCardStatBox {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  padding: 20px;
-  backdrop-filter: blur(30px);
-  box-shadow: 0 0 15px rgba(221, 215, 215, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  will-change: transform;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  transform: none;
-  opacity: 0;
-  animation-duration: 1s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
-}
-
-/* Hover effects */
-.profileCard:hover,
-.attendanceCardStatBox:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px 5px rgba(178, 110, 255, 0.6);
-}
-
-/* Animate profile card */
-.profileCard {
-  grid-area: profile;
-  padding: 30px;
-  margin-left: -20px;
-  animation: slideInFromLeft 1s ease-out forwards;
-  animation-delay: 0.4s;
-}
-
-/* Animate attendance card */
-.attendanceCard {
-  grid-area: attendance;
-  margin-left: 20px;
-  animation: slideInFromRight 1s ease-out forwards;
-  animation-delay: 0.6s;
-}
-
-/* Animate GPA card */
-.gpaCard {
-  grid-area: gpa;
-  margin-top: 30px;
-  animation: slideInFromBottom 1s ease-out forwards;
-  animation-delay: 0.8s;
 }
 
 /* Layout grid */
@@ -137,6 +79,54 @@
   align-items: start;
   text-align: left;
   position: relative;
+}
+
+/* Shared card styles */
+.profileCard,
+.attendanceCardStatBox {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(30px);
+  box-shadow: 0 0 15px rgba(221, 215, 215, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.profileCard:hover,
+.attendanceCardStatBox:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px 5px rgba(178, 110, 255, 0.6);
+}
+
+.profileCard {
+  grid-area: profile;
+  padding: 30px;
+  margin-left: -20px;
+  animation-name: slideInFromLeft;
+  animation-delay: 0.4s;
+}
+
+.attendanceCard {
+  grid-area: attendance;
+  margin-left: 20px;
+  animation-name: slideInFromRight;
+  animation-delay: 0.6s;
+}
+
+.gpaCard {
+  grid-area: gpa;
+  margin-top: 30px;
+  animation-name: slideInFromBottom;
+  animation-delay: 0.8s;
 }
 
 /* Profile image */
@@ -155,16 +145,18 @@
   display: block;
 }
 
-/* Info and buttons */
+/* Info text */
 .profileInfo p {
   margin: 5px 0;
 }
 
+/* Attendance */
 .attendanceCardStatBox h3 {
   color: #b26eff;
   margin-bottom: 10px;
 }
 
+/* Actions */
 .profileActions {
   margin-top: 40px;
   text-align: center;
@@ -178,7 +170,6 @@
   border-radius: 10px;
   color: white;
   cursor: pointer;
-    
   transition: background 0.3s ease;
 }
 
@@ -186,7 +177,7 @@
   background: #9d4dff;
 }
 
-/* 📱 Responsive */
+/* 📱 Responsive layout */
 @media (max-width: 768px) {
   .profileLayout {
     grid-template-areas:

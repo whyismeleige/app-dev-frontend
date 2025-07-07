@@ -1,10 +1,20 @@
 import styles from "./index.module.css";
 import { Link } from "react-router-dom";
+import { useState } from 'react';
 
 export default function NavBar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleNav = () => {
+    setIsOpen(!isOpen);
+  }
   return (
     <>
-      <nav className={styles.topNav}>
+      <button onClick={toggleNav} className={styles.toggleBtn}>
+        {isOpen ? "Close" : "Menu"}
+      </button>
+
+      <nav className={`${styles.topNav} ${isOpen ? styles.open : styles.closed}`}>
         <div className={styles.navLogo}>MyApp</div>
         <ul className={styles.navLinks}>
           <li className={styles.navLinksLine}>
@@ -14,7 +24,7 @@ export default function NavBar() {
             <Link to="dashboard" className={styles.navLinksAnchor}>Dashboard</Link>
           </li>
           <li className={styles.materialDropdown}>
-            <span className={styles.navLinksSpan}>Material</span>
+            <Link to="material" className={styles.navLinksAnchor}>Material</Link>
           </li>
           <li className={styles.navLinksLine}>
             <Link to="attendance" className={styles.navLinksAnchor}>Attendance</Link>
