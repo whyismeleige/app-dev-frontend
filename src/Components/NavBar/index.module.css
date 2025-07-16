@@ -1,249 +1,247 @@
 .topNav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 240px;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(16px);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 16px;
-    z-index: 1000;
-    transition: transform 0.5s ease;
-    transform: translateX(0);
-}
-
-.topNav.closed {
-    transform: translateX(-100%);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  padding: 0 24px;
 }
 
 .navLogo {
-    color: #fff;
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    padding-left: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .navLinks {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-    padding: 0;
-    margin: 0;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
 }
 
-.navLinks .navLinksLine {
-    width: 100%;
-    position: relative;
-}
-
-.navLinksAnchor,
-.navLinksSpan {
-    display: block;
-    width: 100%;
-    color: #ccc;
-    text-decoration: none;
-    font-size: 1rem;
-    padding: 10px 14px;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: color 0.3s ease, background 0.3s ease;
-}
-
-.navLinksAnchor:hover,
-.navLinksSpan:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* Dropdown */
-.dropdown {
-    display: none;
-    flex-direction: column;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(12px);
-    border-radius: 8px;
-    margin-top: 4px;
-    padding: 4px 0;
-    animation: fadeOut 0.3s ease forwards;
-    position: relative;
-    z-index: 1001;
-    pointer-events: none;
-}
-
-.materialDropdown:hover .dropdown {
-    display: flex;
-    animation: fadeIn 0.3s ease forwards;
-    pointer-events: auto;
-}
-
-.dropdown li {
-    padding: 6px 16px;
-    color: #ccc;
-    list-style: none;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.dropdown li:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* SEM PREVIEW */
-.semPreview {
-    position: fixed;
-    top: 30px;
-    left: 260px;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    border-radius: 8px;
-    padding: 12px;
-    z-index: 1000;
-}
-
-.semPreview h4 {
-    color: #fff;
-    font-size: 1rem;
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-.thumbGrid {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.thumbItem {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.thumbItem img {
-    width: 100px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 4px;
-    cursor: pointer;
-    filter: blur(4px);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.thumbItem img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 12px rgba(178, 110, 255, 0.7);
-    filter: none;
-}
-
-.thumbItem small {
-    color: #ccc;
-    font-size: 0.75rem;
-    margin-top: 4px;
-}
-
-/* FULLSCREEN VIEW */
-.materialFullscreen {
-    position: fixed;
-    inset: 0;
-    background: rgba(10, 10, 20, 0.96);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 1002;
-    padding: 1rem;
-    gap: 1rem;
-}
-
-.materialFullscreen h3 {
-    color: white;
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
-}
-
-.materialFullscreen .thumbGrid {
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.materialFullscreen img {
-    width: 240px;
-    height: auto;
-    border-radius: 10px;
-    margin: 6px;
-}
-
-.materialFullscreen small {
-    color: #bbb;
-    font-size: 0.85rem;
-}
-
-.toggleBtn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1100;
-  background-color: #222;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
+.navLinks li a,
+.navLinks li span {
+  color: #ffffff;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
   cursor: pointer;
 }
 
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.navLinks li a:hover,
+.navLinks li span:hover {
+  color: #ffffff;
 }
 
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+.materialDropdown {
+  position: relative;
 }
 
-@media (max-width: 768px) {
-    .topNav {
-        width: 200px;
-        transform: translateX(-100%);
-    }
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background: rgba(20, 20, 20, 0.9);
+  padding: 8px 0;
+  border-radius: 6px;
+  list-style: none;
+  min-width: 160px;
+  z-index: 1001;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+  animation: fadeSlideDown 0.3s ease-out;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
 
-    .topNav.open {
-        transform: translateX(0);
-    }
+.materialDropdown:hover .dropdown,
+.materialDropdown:focus-within .dropdown {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 
-    .semPreview {
-        left: 220px;
-    }
+.dropdown li {
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-    .dropdown {
-        position: relative;
-        opacity: 1;
-        display: none;
-        animation: none;
-    }
+.dropdown li:hover {
+  background: #2b2b2b;
+}
 
-    .materialDropdown.open .dropdown {
-        display: flex;
-    }
+.notificationContainer {
+  position: relative;
+  margin-left: 24px;
+}
+
+.notificationIcon {
+  position: relative;
+  cursor: pointer;
+}
+
+.notificationIcon img {
+  width: 20px;
+  height: 20px;
+}
+
+.dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  height: 8px;
+  width: 8px;
+  background-color: rgb(0, 157, 255);
+  border-radius: 50%;
+}
+
+.notificationDropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 250px;
+  background: rgba(20, 20, 20, 0.95);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  padding: 12px;
+  color: white;
+  list-style: none;
+  z-index: 1001;
+  animation: fadeSlideDown 0.3s ease-out;
+}
+
+.notificationDropdown li {
+  padding: 8px;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+}
+
+.notificationDropdown li:last-child {
+  border-bottom: none;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+}
+
+.semPreview {
+  position: absolute;
+  top: 64px;
+  left: 24px;
+  background: rgba(15, 15, 15, 0.95);
+  padding: 16px;
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+.thumbGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 80px);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.thumbItem {
+  text-align: center;
+}
+
+.thumbItem img {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.thumbItem small {
+  color: #ccc;
+  font-size: 12px;
+}
+
+.materialFullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 40px;
+  overflow-y: auto;
+  z-index: 9999;
+  color: white;
+}
+
+.materialFullscreen h3 {
+  margin-bottom: 20px;
+}
+
+.materialFullscreen small {
+  display: block;
+  margin-top: 24px;
+  text-align: center;
+  color: #aaa;
+  font-size: 14px;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeSlideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slideDown {
+  animation: slideDown 0.6s ease-out forwards;
+}
+
+.profileImg {
+  width: auto;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  margin-right: 40px;
+  animation: slideInFromRight 0.8s ease-out forwards;
+  justify-content: space-between;
+  margin: 10px;
 }
