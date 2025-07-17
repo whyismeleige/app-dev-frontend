@@ -34,6 +34,8 @@ export default function NavBar() {
   const [fullscreenSem, setFullscreenSem] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(true);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  let dropdownTimeout;
 
   useEffect(() => {
     document.querySelector(`.${styles.topNav}`)?.classList.add(styles.slideDown);
@@ -42,6 +44,17 @@ export default function NavBar() {
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
     setHasNewNotifications(false);
+  };
+
+  const handleDropdownEnter = () => {
+    clearTimeout(dropdownTimeout);
+    setIsDropdownVisible(true);
+  };
+
+  const handleDropdownLeave = () => {
+    dropdownTimeout = setTimeout(() => {
+      setIsDropdownVisible(false);
+    }, 1000);
   };
 
   return (
@@ -53,9 +66,14 @@ export default function NavBar() {
           <ul className={styles.navLinks}>
             <li><Link to="/home">Home</Link></li>
 
-            <li className={styles.materialDropdown}>
+            <li
+              className={styles.materialDropdown}
+              onMouseEnter={handleDropdownEnter}
+              onMouseLeave={handleDropdownLeave}
+              onClick={handleDropdownEnter}
+            >
               <span>Material</span>
-              <ul className={styles.dropdown}>
+              <ul className={`${styles.dropdown} ${isDropdownVisible ? styles.showDropdown : ""}`}>
                 {Object.keys(semesterDocs).map((sem) => (
                   <li
                     key={sem}
@@ -107,7 +125,7 @@ export default function NavBar() {
         </div>
       </nav>
 
-      {hoveredSemester && !fullscreenSem && (
+      {/* {hoveredSemester && !fullscreenSem && (
         <div className={styles.semPreview}>
           <h4>{hoveredSemester} Materials</h4>
           <div className={styles.thumbGrid}>
@@ -133,8 +151,8 @@ export default function NavBar() {
             ))}
           </div>
           <small>Click anywhere to close</small>
-        </div>
-      )}
+        </div> */}
+      )
     </>
   );
 }

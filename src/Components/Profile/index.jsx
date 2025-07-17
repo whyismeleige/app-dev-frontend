@@ -22,7 +22,7 @@ export default function Profile() {
             <div className={styles.profilePicWrapper}>
               <img
                 className={styles.profilePic}
-                src={'https://i.pravatar.cc/40'}
+                src={"https://i.pravatar.cc/40"}
                 alt="Profile"
               />
             </div>
@@ -33,16 +33,18 @@ export default function Profile() {
               <p>Email: {user.email}</p>
               <p>Department: {user.dept}</p>
               <p>Semester: {user.semester}</p>
+
+              <button className={styles.editButton}>Edit Profile</button>
             </div>
           </div>
 
           <div className={styles.attendanceCardStatBox}>
             <h3>Attendance</h3>
             <img
-                className={styles.attendence}
-                src={'https://i.ibb.co/rJyrT3r/Screenshot-2025-07-16-210118.png'}
-                alt="Graph"
-              />
+              className={styles.attendence}
+              src={"https://i.ibb.co/rJyrT3r/Screenshot-2025-07-16-210118.png"}
+              alt="Graph"
+            />
             <p>{user.attendance}</p>
           </div>
 
@@ -50,15 +52,11 @@ export default function Profile() {
             <h3>GPA</h3>
             <p>{user.gpa}</p>
             <img
-                className={styles.gpa}
-                src={'https://i.ibb.co/KpRHBXMR/Screenshot-2025-07-16-211415.png'}
-                alt="Graph"
-              />
+              className={styles.gpa}
+              src={"https://i.ibb.co/KpRHBXMR/Screenshot-2025-07-16-211415.png"}
+              alt="Graph"
+            />
           </div>
-        </div>
-
-        <div className={styles.profileActions}>
-          <button>Edit Profile</button>
         </div>
       </div>
     </>

@@ -172,23 +172,21 @@ body {
   margin-bottom: 10px;
 }
 
-/* Button */
-.profileActions {
-  margin-top: 40px;
-}
-.profileActions button {
-  background: linear-gradient(135deg, #3C68FF, #0075ff);
-  border: none;
-  padding: 12px 24px;
-  font-size: 1rem;
-  border-radius: 12px;
+.editButton {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #4318FF, #7551FF);
   color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
-.profileActions button:hover {
-  background: #0075ff;
-  box-shadow: 0 0 15px rgba(60, 104, 255, 0.4);
+
+.editButton:hover {
+  background: linear-gradient(135deg, #573bff, #876cff);
+  transform: scale(1.05);
 }
 
 /* Responsive */
