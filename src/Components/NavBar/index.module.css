@@ -245,3 +245,22 @@
   justify-content: space-between;
   margin: 10px;
 }
+.logoutButton {
+  background: linear-gradient(135deg, black, #2d2d5f);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  margin-left: 12px;
+}
+
+.logoutButton:hover {
+  background: linear-gradient(to right, black, #4318FF);
+  box-shadow: 0 0 15px rgba(67, 24, 255, 0.7), 0 0 5px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px) scale(1.02);
+}

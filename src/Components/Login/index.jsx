@@ -56,8 +56,8 @@ export const LoginForm = (props) => {
   };
   return (
     <>
-      <Iridescence />
-
+      {/* <Iridescence /> */}
+      <div className={styles.auroraBackground}></div>
       <div className={styles.wrap}>
         <form onSubmit={handleSubmit}>
           <h1 className={styles.header}>

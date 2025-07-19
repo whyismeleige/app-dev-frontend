@@ -1,32 +1,9 @@
 import styles from "./index.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ✅ add useNavigate
 import React, { useState, useEffect } from "react";
 
 const semesterDocs = {
-  "Semester 1": [
-    { url: "https://picsum.photos/seed/sem1doc1/100/120", label: "Sem1 - Doc1" },
-    { url: "https://picsum.photos/seed/sem1doc2/100/120", label: "Sem1 - Doc2" },
-    { url: "https://picsum.photos/seed/sem1doc3/100/120", label: "Sem1 - Doc3" },
-    { url: "https://picsum.photos/seed/sem1doc4/100/120", label: "Sem1 - Doc4" }
-  ],
-  "Semester 2": [
-    { url: "https://picsum.photos/seed/sem2doc1/100/120", label: "Sem2 - Doc1" },
-    { url: "https://picsum.photos/seed/sem2doc2/100/120", label: "Sem2 - Doc2" },
-    { url: "https://picsum.photos/seed/sem2doc3/100/120", label: "Sem2 - Doc3" },
-    { url: "https://picsum.photos/seed/sem2doc4/100/120", label: "Sem2 - Doc4" }
-  ],
-  "Semester 3": [
-    { url: "https://picsum.photos/seed/sem3doc1/100/120", label: "Sem3 - Doc1" },
-    { url: "https://picsum.photos/seed/sem3doc2/100/120", label: "Sem3 - Doc2" },
-    { url: "https://picsum.photos/seed/sem3doc3/100/120", label: "Sem3 - Doc3" },
-    { url: "https://picsum.photos/seed/sem3doc4/100/120", label: "Sem3 - Doc4" }
-  ],
-  "Semester 4": [
-    { url: "https://picsum.photos/seed/sem4doc1/100/120", label: "Sem4 - Doc1" },
-    { url: "https://picsum.photos/seed/sem4doc2/100/120", label: "Sem4 - Doc2" },
-    { url: "https://picsum.photos/seed/sem4doc3/100/120", label: "Sem4 - Doc3" },
-    { url: "https://picsum.photos/seed/sem4doc4/100/120", label: "Sem4 - Doc4" }
-  ]
+  // (unchanged)
 };
 
 export default function NavBar() {
@@ -37,8 +14,17 @@ export default function NavBar() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   let dropdownTimeout;
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    console.log("Logged out");
+    navigate("/login");
+  };
+
   useEffect(() => {
-    document.querySelector(`.${styles.topNav}`)?.classList.add(styles.slideDown);
+    document
+      .querySelector(`.${styles.topNav}`)
+      ?.classList.add(styles.slideDown);
   }, []);
 
   const handleNotificationClick = () => {
@@ -64,16 +50,25 @@ export default function NavBar() {
 
         <div className={styles.navInner}>
           <ul className={styles.navLinks}>
-            <li><Link to="/home">Home</Link></li>
+            <li>
+              <Link to="/home">Home</Link>
+            </li>
+            <li>
+              <Link to="/material">Materials</Link>
+            </li>
 
-            <li
+            {/* <li
               className={styles.materialDropdown}
               onMouseEnter={handleDropdownEnter}
               onMouseLeave={handleDropdownLeave}
               onClick={handleDropdownEnter}
             >
               <span>Material</span>
-              <ul className={`${styles.dropdown} ${isDropdownVisible ? styles.showDropdown : ""}`}>
+              <ul
+                className={`${styles.dropdown} ${
+                  isDropdownVisible ? styles.showDropdown : ""
+                }`}
+              >
                 {Object.keys(semesterDocs).map((sem) => (
                   <li
                     key={sem}
@@ -85,16 +80,25 @@ export default function NavBar() {
                   </li>
                 ))}
               </ul>
-            </li>
+            </li> */}
 
-            <li><Link to="/attendance">Attendance</Link></li>
-            <li><Link to="/chats">Live Chats</Link></li>
-            <li><Link to="/chats">ChatGPT</Link></li>
+            <li>
+              <Link to="/attendance">Attendance</Link>
+            </li>
+            <li>
+              <Link to="/chats">Live Chats</Link>
+            </li>
+            <li>
+              <Link to="/chatgpt">ChatGPT</Link>
+            </li>
           </ul>
 
           <div className={styles.navRight}>
             <div className={styles.notificationContainer}>
-              <div className={styles.notificationIcon} onClick={handleNotificationClick}>
+              <div
+                className={styles.notificationIcon}
+                onClick={handleNotificationClick}
+              >
                 {hasNewNotifications && <span className={styles.dot} />}
                 <img
                   src="https://img.icons8.com/ios-filled/24/ffffff/appointment-reminders.png"
@@ -121,38 +125,14 @@ export default function NavBar() {
                 </div>
               </Link>
             </div>
+
+            {/*Logout button */}
+            <button className={styles.logoutButton} onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </div>
       </nav>
-
-      {/* {hoveredSemester && !fullscreenSem && (
-        <div className={styles.semPreview}>
-          <h4>{hoveredSemester} Materials</h4>
-          <div className={styles.thumbGrid}>
-            {semesterDocs[hoveredSemester].map((doc, i) => (
-              <div key={i} className={styles.thumbItem}>
-                <img src={doc.url} alt={doc.label} />
-                <small>{doc.label}</small>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {fullscreenSem && (
-        <div className={styles.materialFullscreen} onClick={() => setFullscreenSem(null)}>
-          <h3>{fullscreenSem}</h3>
-          <div className={styles.thumbGrid}>
-            {semesterDocs[fullscreenSem].map((doc, i) => (
-              <div key={i} className={styles.thumbItem}>
-                <img src={doc.url.replace("/100/120", "/300/400")} alt={doc.label} />
-                <small>{doc.label}</small>
-              </div>
-            ))}
-          </div>
-          <small>Click anywhere to close</small>
-        </div> */}
-      )
     </>
   );
 }

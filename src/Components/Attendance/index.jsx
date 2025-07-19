@@ -3,7 +3,7 @@ import styles from "./index.module.css";
 import clsx from "clsx";
 
 const startMonth = 5; // June
-const endMonth = 9; // November
+const endMonth = 9; // October
 const startDate = 11;
 const endDate = 15;
 let gazettedHolidays;
@@ -78,22 +78,41 @@ export default function Attendance() {
         <h1 className={styles.profileHeading}>Attendance Tracker</h1>
 
         <div className={styles.profileLayout}>
-          {/* Stat Card 1 */}
+          {/* Days Present Card */}
           <div className={styles.attendanceCardStatBox}>
             <h3>Days Present</h3>
             <p className={styles.statValue}>{totalPresent}</p>
           </div>
 
-          {/* Stat Card 2 */}
+          {/* Holidays Taken Card */}
           <div className={styles.gpaCardStatBox}>
             <h3>Holidays Taken</h3>
             <p className={styles.statValue}>{holidays}</p>
           </div>
 
-          {/* Calendar Card */}
+          {/* Attendance Calculator Card */}
+          <div className={styles.calculatorCard}>
+            <h3>Attendance Calculator</h3>
+            <div className={styles.calculatorContent}>
+              <p><b>!!!! Neeed tooo change !!!</b></p>
+              <p>Total Working Days: {totalDays.days}</p>
+              <p>Days Present: {totalPresent}</p>
+              <p>Required for 75%: {Math.ceil(totalDays.days * 0.75)}</p>
+              <p>
+                {totalPresent >= Math.ceil(totalDays.days * 0.75)
+                  ? `Can miss ${
+                      totalPresent - Math.ceil(totalDays.days * 0.75)
+                    } more`
+                  : `Need ${
+                      Math.ceil(totalDays.days * 0.75) - totalPresent
+                    } more`}
+              </p>
+            </div>
+          </div>
+
+          {/* Attendance Calendar Card */}
           <div className={styles.profileCard}>
             <h3>Attendance Calendar</h3>
-
             <div className={styles.attendanceGridWrapper}>
               {Object.entries(datesByMonth).map(([month, dates]) => {
                 // Build weekly columns
@@ -101,12 +120,10 @@ export default function Attendance() {
                 let currentColumn = new Array(7).fill(null);
 
                 dates.forEach((date) => {
-                  const day = date.getDay(); // Sunday = 0 ... Saturday = 6
+                  const day = date.getDay();
                   const dateStr = date.toLocaleDateString("en-CA");
-
                   currentColumn[day] = dateStr;
 
-                  // If day is Saturday or end of month, push the column
                   if (day === 6 || date === dates[dates.length - 1]) {
                     columns.push(currentColumn);
                     currentColumn = new Array(7).fill(null);
@@ -125,10 +142,13 @@ export default function Attendance() {
                       {columns.map((column, colIdx) => (
                         <div key={colIdx} className={styles.weekColumn}>
                           {column.map((dateStr, rowIdx) => {
+                            if (!dateStr) return <div key={rowIdx} className={styles.emptyBox} />;
+
                             const dateObj = new Date(dateStr);
                             const isWeekend =
                               dateObj.getDay() === 0 || dateObj.getDay() === 6;
-                            return dateStr ? (
+
+                            return (
                               <input
                                 key={rowIdx}
                                 type="checkbox"
@@ -147,8 +167,6 @@ export default function Attendance() {
                                 readOnly={isWeekend}
                                 data-tooltip={new Date(dateStr).toDateString()}
                               />
-                            ) : (
-                              <div key={rowIdx} className={styles.emptyBox} />
                             );
                           })}
                         </div>

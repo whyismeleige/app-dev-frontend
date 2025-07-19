@@ -1,59 +1,128 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+:root {
+  --primary-blue: #1f2cbd;
+  --hover-blue: #3b48ff;
+  --light-blue-glow: #393dfe;
+  --font: 'Poppins', sans-serif;
+  --glass-bg: rgba(0, 0, 0, 0.4);
+  --white-translucent: rgba(255, 255, 255, 0.1);
+}
+
+.auroraBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: linear-gradient(135deg, #000010, #010320, #060d2b);
+  overflow: hidden;
+}
+
+.auroraBackground::before,
+.auroraBackground::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+      ellipse at 30% 30%,
+      rgba(59, 72, 255, 0.15),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 70% 70%,
+      rgba(31, 44, 189, 0.15),
+      transparent 60%
+    );
+  animation: auroraMotion 25s ease-in-out infinite;
+  filter: blur(100px);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.auroraBackground::after {
+  animation-direction: reverse;
+}
+
+@keyframes auroraMotion {
+  0% {
+    transform: translate(0%, 0%) rotate(0deg);
+  }
+  50% {
+    transform: translate(-10%, -5%) rotate(180deg);
+  }
+  100% {
+    transform: translate(0%, 0%) rotate(360deg);
+  }
+}
+
+
 .wrap {
   width: 100%;
   max-width: 400px;
-  background: transparent;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(30px);
-  box-shadow: 0 0 15px rgba(221, 215, 215, 0.3);
-  color: white;
-  border-radius: 12px;
+  background: var(--glass-bg);
+  border: 1.5px solid var(--white-translucent);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(0, 123, 255, 0.2);
+  border-radius: 16px;
   padding: 40px 30px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.5s ease;
 }
 
-/* Title */
+.wrap:hover {
+  box-shadow: 0 0 7px rgba(0, 123, 255, 0.5), 0 0 60px rgba(0, 123, 255, 0.2);
+  transform: translateY(-4px) scale(1.01);
+}
+
 .wrap .header {
   font-size: 40px;
   text-align: center;
   margin-bottom: 30px;
+  color: #ffffff;
+  letter-spacing: 1px;
 }
 
-/* Input container */
 .wrap .inputBox {
   position: relative;
   width: 100%;
   margin: 25px 0;
 }
 
-/* Input field */
 .inputBox .input {
   width: 100%;
   height: 50px;
-  background: transparent;
-  outline: none;
-  border: 2px solid rgba(255, 255, 255, 0.932);
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--primary-blue);
   border-radius: 40px;
   font-size: 14px;
   color: white;
   padding: 0 50px 0 20px;
+  transition: 0.3s ease;
+}
+
+.inputBox .input:focus {
+  border-color: var(--hover-blue);
+  box-shadow: 0 0 10px var(--hover-blue);
 }
 
 .inputBox .input::placeholder {
-  color: rgb(214, 210, 210);
+  color: rgba(200, 200, 200, 0.7);
 }
 
-/* Icon */
 .inputBox .icon {
   position: absolute;
   right: 20px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 20px;
+  color: var(--primary-blue);
   cursor: pointer;
 }
 
-/* Remember & Forgot */
 .rememberForgot {
   display: flex;
   justify-content: flex-end;
@@ -69,40 +138,58 @@
 }
 
 .checkBox {
-  accent-color: white;
+  accent-color: var(--primary-blue);
   margin-right: 6px;
 }
 
 .aTag {
   color: white;
   text-decoration: none;
+  transition: 0.3s ease;
 }
 
 .aTag:hover {
   text-decoration: underline;
+  color: var(--hover-blue);
 }
 
-/* Login button */
 .wrap .loginButton {
   width: 100%;
   height: 50px;
-  background: transparent;
-  border: 2px solid white;
-  outline: none;
+  background: linear-gradient(135deg, #3b48ff, #1f2cbd);
+  border: none;
   border-radius: 40px;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
-  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(59, 72, 255, 0.5);
   font-size: 16px;
   color: white;
   font-weight: 600;
-  transition: background 0.3s;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.wrap .loginButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: skewX(-20deg);
+  transition: left 0.5s;
+}
+
+.wrap .loginButton:hover::before {
+  left: 125%;
 }
 
 .wrap .loginButton:hover {
-  background: #9400f7;
+  background: linear-gradient(135deg, #1f2cbd, #3b48ff);
+  transform: scale(1.03);
 }
 
-/* Register link */
 .wrap .registerLink {
   font-size: 14px;
   text-align: center;
@@ -115,15 +202,9 @@
 
 .registerLink .text .aTag {
   color: white;
-  text-decoration: none;
   font-weight: 600;
 }
 
-.registerLink .text .aTag:hover {
-  text-decoration: underline;
-}
-
-/* Google button wrapper */
 .googlewrapper {
   display: flex;
   justify-content: center;
@@ -140,16 +221,20 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
+  transition: 0.3s ease;
 }
 
-/* Extra text below */
+.googleButton:hover {
+  background-color: #f1f1f1;
+}
+
 .dontHave {
   margin-top: 20px;
   font-size: 12px;
   text-align: center;
+  color: #ccc;
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .wrap {
     padding: 30px 20px;

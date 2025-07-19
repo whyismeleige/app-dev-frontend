@@ -16,7 +16,7 @@ body {
   width: 150%;
   height: 300px;
   background: radial-gradient(circle at center, rgba(60, 104, 255, 0.2), transparent);
-  box-shadow: 0 0 50px 80px #0075ff;
+  box-shadow: 0 0 50px 80px #0004ff;
   filter: blur(20px);
   border-radius: 50%;
   z-index: 0;
@@ -52,7 +52,9 @@ body {
   display: grid;
   grid-template-areas:
     "attendance holidays"
-    "calendar calendar";
+    "calendar calendar"
+    "calculator calculator"
+    ;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   max-width: 1000px;
@@ -61,6 +63,7 @@ body {
   text-align: left;
   position: relative;
 }
+
 
 /* === Card Base === */
 .profileCard,
@@ -79,19 +82,19 @@ body {
   animation-fill-mode: forwards;
   border: none;
   box-shadow: none;
-  background: linear-gradient(to bottom, black, #333da8);
+  background: linear-gradient(to bottom, black, #1f2cbd);
 }
 
 /* === Individual Card Areas === */
 .attendanceCardStatBox {
   grid-area: attendance;
-  background: radial-gradient(circle at top left, black, #333da8);
+  background: radial-gradient(circle at top left, black, #1f2cbd);
   animation-name: slideInFromLeft;
   animation-delay: 0.4s;
 }
 .gpaCardStatBox {
   grid-area: holidays;
-  background: linear-gradient(to bottom right, black, #333da8);
+  background: linear-gradient(to bottom right, black, #1f2cbd);
   animation: slideInFromRight 1s ease-out forwards;
   animation-delay: 0.6s;
 }
@@ -246,6 +249,31 @@ body {
   height: 16px;
   background-color: transparent;
 }
+/* Attendence Calculator */
+.calculatorCard {
+  grid-area: calculator;
+  border-radius: 16px;
+  padding: 30px;
+  min-height: 180px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  animation: slideInFromBottom 1s ease-out forwards;
+  animation-delay: 0.9s;
+  border: none;
+  box-shadow: none;
+  background: linear-gradient(to top, black, #1f2cbd);
+}
+
+.calculatorCard:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(0, 175, 255, 0.25),
+              inset 0 0 10px rgba(60, 104, 255, 0.12);
+}
+
 
 /* === Animations === */
 @keyframes fadeInUp {
