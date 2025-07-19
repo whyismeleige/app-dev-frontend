@@ -124,37 +124,7 @@ body {
               inset 0 0 10px rgba(60, 104, 255, 0.12);
 }
 
-.attendancePage {
-  min-height: 100vh;
-  padding: 2rem;
-  background: linear-gradient(145deg, #0f1535, #1e1e3f);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.pageHeader {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  text-align: center;
-  color: #ffffff;
-  animation: fadeInDown 0.6s ease-out;
-}
-
-.attendanceCard {
-  background: rgba(30, 30, 63, 0.6);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 0 20px rgba(67, 24, 255, 0.3);
-  backdrop-filter: blur(16px);
-  max-width: 95vw;
-  overflow-x: auto;
-  animation: fadeInUp 0.6s ease-in;
-}
-
+/* === Attendance Calendar === */
 .attendanceGridWrapper {
   display: flex;
   gap: 2rem;
@@ -162,6 +132,15 @@ body {
   padding: 1rem 0;
   flex-wrap: nowrap;
   overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.attendanceGridWrapper::-webkit-scrollbar {
+  height: 6px;
+}
+.attendanceGridWrapper::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
 }
 
 .monthBlock {
@@ -201,6 +180,25 @@ body {
   box-shadow: 0 0 6px rgba(0, 117, 255, 0.2);
 }
 
+.dayCheckbox:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 1;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: opacity 0.2s ease;
+}
+
+
 .dayCheckbox:checked {
   background-color: #0075ff;
   box-shadow: 0 0 12px rgba(0, 117, 255, 0.8);
@@ -210,41 +208,46 @@ body {
   transform: scale(1.1);
 }
 
+.inputWrapper{
+  position: relative;
+}
+
+.inputToolTip{
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 4px 8px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Show above the element */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.dayCheckbox:hover .inputToolTip{
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Weekend Checkbox */
+.weekendCheckbox{
+  background-color: rgba(255, 0 , 0, 0.5) !important;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.6) !important;
+  cursor: not-allowed;
+}
+
 .emptyBox {
   width: 16px;
   height: 16px;
   background-color: transparent;
 }
 
-@media (max-width: 768px) {
-  .attendanceGridWrapper {
-    gap: 1.2rem;
-  }
-
-  .monthBlock {
-    min-width: 100px;
-  }
-
-  .dayCheckbox,
-  .emptyBox {
-    width: 12px;
-    height: 12px;
-  }
-
-  .weekColumns {
-    gap: 3px;
-  }
-
-  .weekColumn {
-    gap: 3px;
-  }
-
-  .attendanceCard {
-    padding: 1.2rem;
-  }
-}
-
-/* Animations */
+/* === Animations === */
 @keyframes fadeInUp {
   0% {
     transform: translateY(40px);
@@ -255,7 +258,6 @@ body {
     opacity: 1;
   }
 }
-
 @keyframes fadeInDown {
   0% {
     transform: translateY(-40px);
@@ -266,9 +268,6 @@ body {
     opacity: 1;
   }
 }
-
-
-/* === Animations === */
 @keyframes slideInFromTop {
   from { opacity: 0; transform: translateY(-100%); }
   to { opacity: 1; transform: translateY(0); }
@@ -286,20 +285,35 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* === Responsive === */
-@media (max-width: 768px) {
+/* === Responsive Enhancements === */
+@media (max-width: 1024px) {
   .profileLayout {
+    grid-template-columns: 1fr;
     grid-template-areas:
       "attendance"
       "holidays"
       "calendar";
-    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
-  .calendarGridWrapper {
-    padding: 0 10px;
-    overflow-x: auto;
-    gap: 8px;
+  .profileHeading {
+    font-size: 2.2rem;
+  }
+
+  .statValue {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .profileLayout {
+    padding: 0 1rem;
+  }
+
+  .attendanceCardStatBox,
+  .gpaCardStatBox,
+  .profileCard {
+    padding: 1.5rem;
   }
 
   .profileHeading {
@@ -307,6 +321,62 @@ body {
   }
 
   .statValue {
-    font-size: 2rem;
+    font-size: 1.8rem;
+  }
+
+  .attendanceGridWrapper {
+    gap: 1.2rem;
+    padding-bottom: 1rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .monthBlock {
+    min-width: 90px;
+  }
+
+  .monthLabel {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .dayCheckbox,
+  .emptyBox {
+    width: 10px;
+    height: 10px;
+  }
+
+  .weekColumns {
+    gap: 3px;
+  }
+
+  .weekColumn {
+    gap: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileHeading {
+    font-size: 1.7rem;
+  }
+
+  .statValue {
+    font-size: 1.6rem;
+  }
+
+  .attendanceCardStatBox,
+  .gpaCardStatBox,
+  .profileCard {
+    padding: 1rem;
+  }
+
+  .monthBlock {
+    min-width: 80px;
+  }
+
+  .dayCheckbox,
+  .emptyBox {
+    width: 8px;
+    height: 8px;
   }
 }

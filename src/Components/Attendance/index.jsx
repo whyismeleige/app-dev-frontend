@@ -1,20 +1,40 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.css";
+import clsx from "clsx";
 
 const startMonth = 5; // June
-const endMonth = 10;  // November
+const endMonth = 9; // November
+const startDate = 11;
+const endDate = 15;
+let gazettedHolidays;
 
-const generateDates = () => {
+const url = process.env.REACT_APP_SERVER_URL;
+
+const getHolidays = async () => {
+  const res = await fetch(`${url}/api/holidays`);
+  const data = await res.json();
+  const holidays = [];
+  data.forEach((entry) => {
+    if (entry.type === "Gazetted Holiday") holidays.push(entry.date);
+  });
+  return new Set(holidays);
+};
+
+const generateDates = (totalDays) => {
   const result = {};
   const year = new Date().getFullYear();
 
   for (let month = startMonth; month <= endMonth; month++) {
-    const date = new Date(year, month, 1);
+    let dateNum = month === startMonth ? startDate : 1;
+    const date = new Date(year, month, dateNum);
     const days = [];
 
     while (date.getMonth() === month) {
+      if (date.getDay() !== 0 && date.getDay() !== 6) totalDays.days += 1;
+      if (month === endMonth && dateNum > endDate) break;
       days.push(new Date(date));
       date.setDate(date.getDate() + 1);
+      dateNum++;
     }
 
     result[month] = days;
@@ -25,7 +45,21 @@ const generateDates = () => {
 
 export default function Attendance() {
   const [attendance, setAttendance] = useState({});
-  const datesByMonth = generateDates();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        gazettedHolidays = await getHolidays();
+        console.log(gazettedHolidays);
+      } catch (error) {
+        console.error("Error Fetching Holidays Data");
+      }
+    };
+    fetchData();
+  }, []);
+
+  const totalDays = { days: 0 };
+  const datesByMonth = generateDates(totalDays);
 
   const handleCheckboxChange = (dateStr) => {
     setAttendance((prev) => ({
@@ -35,8 +69,7 @@ export default function Attendance() {
   };
 
   const totalPresent = Object.values(attendance).filter(Boolean).length;
-  const totalDays = Object.values(datesByMonth).flat().length;
-  const holidays = totalDays - totalPresent;
+  const holidays = totalDays.days - totalPresent;
 
   return (
     <>
@@ -53,7 +86,7 @@ export default function Attendance() {
 
           {/* Stat Card 2 */}
           <div className={styles.gpaCardStatBox}>
-            <h3>Holidays</h3>
+            <h3>Holidays Taken</h3>
             <p className={styles.statValue}>{holidays}</p>
           </div>
 
@@ -69,7 +102,7 @@ export default function Attendance() {
 
                 dates.forEach((date) => {
                   const day = date.getDay(); // Sunday = 0 ... Saturday = 6
-                  const dateStr = date.toISOString().split("T")[0];
+                  const dateStr = date.toLocaleDateString("en-CA");
 
                   currentColumn[day] = dateStr;
 
@@ -91,22 +124,33 @@ export default function Attendance() {
                     <div className={styles.weekColumns}>
                       {columns.map((column, colIdx) => (
                         <div key={colIdx} className={styles.weekColumn}>
-                          {column.map((dateStr, rowIdx) =>
-                            dateStr ? (
+                          {column.map((dateStr, rowIdx) => {
+                            const dateObj = new Date(dateStr);
+                            const isWeekend =
+                              dateObj.getDay() === 0 || dateObj.getDay() === 6;
+                            return dateStr ? (
                               <input
                                 key={rowIdx}
                                 type="checkbox"
-                                className={styles.dayCheckbox}
-                                checked={attendance[dateStr] || false}
-                                onChange={() => handleCheckboxChange(dateStr)}
+                                className={clsx(styles.dayCheckbox, {
+                                  [styles.weekendCheckbox]: isWeekend,
+                                })}
+                                checked={
+                                  isWeekend
+                                    ? true
+                                    : attendance[dateStr] || false
+                                }
+                                onChange={() => {
+                                  if (!isWeekend) handleCheckboxChange(dateStr);
+                                }}
+                                disabled={isWeekend}
+                                readOnly={isWeekend}
+                                data-tooltip={new Date(dateStr).toDateString()}
                               />
                             ) : (
-                              <div
-                                key={rowIdx}
-                                className={styles.emptyBox}
-                              />
-                            )
-                          )}
+                              <div key={rowIdx} className={styles.emptyBox} />
+                            );
+                          })}
                         </div>
                       ))}
                     </div>
