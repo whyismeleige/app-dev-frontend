@@ -14,7 +14,7 @@ export default function UserHome() {
         <Route path="/" element={<><NavBar /><ChatBot /><Outlet /></>}>
           <Route path="profile" element={<Profile />} />
           <Route path="material" element={<Material />} />
-          <Route path="chatpage" element={<ChatGPT />} />
+          <Route path="chatgpt" element={<ChatGPT />} />
           <Route path="attendance" element={<Attendance />} />
         </Route>
       </Routes>

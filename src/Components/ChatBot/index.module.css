@@ -134,3 +134,25 @@
 .hide {
   display: none;
 }
+.chatWindow::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatWindow::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatWindow::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 4, 255, 0.5);
+  border-radius: 4px;
+}
+
+.chatWindow:hover::-webkit-scrollbar-thumb {
+  background-color: #0004ff;
+}
+
+/* Firefox support */
+.chatWindow {
+  scrollbar-width: thin;
+  scrollbar-color: #0004ff transparent;
+}

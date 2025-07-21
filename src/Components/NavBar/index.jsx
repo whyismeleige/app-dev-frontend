@@ -1,9 +1,9 @@
 import styles from "./index.module.css";
-import { Link, useNavigate } from "react-router-dom"; // ✅ add useNavigate
+import { Link, useNavigate } from "react-router-dom"; 
 import React, { useState, useEffect } from "react";
 
 const semesterDocs = {
-  // (unchanged)
+  
 };
 
 export default function NavBar() {
@@ -85,9 +85,9 @@ export default function NavBar() {
             <li>
               <Link to="/attendance">Attendance</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/chats">Live Chats</Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/chatgpt">ChatGPT</Link>
             </li>

@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./index.module.css";
+import { FaPaperPlane } from "react-icons/fa6"; // Send icon
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [isOpen, setIsOpen] = useState(false); // starts closed
+  const [isOpen, setIsOpen] = useState(false);
   const [closing, setClosing] = useState(false);
+  const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const sendMessage = () => {
     if (!input.trim()) return;
@@ -55,7 +63,9 @@ export default function ChatBot() {
               {msg.text}
             </div>
           ))}
+          <div ref={chatEndRef} />
         </div>
+
         <div className={styles.inputArea}>
           <input
             type="text"
@@ -66,7 +76,7 @@ export default function ChatBot() {
             placeholder="Type your message..."
           />
           <button onClick={sendMessage} className={styles.sendButton}>
-            Send
+            <FaPaperPlane />
           </button>
         </div>
       </div>
