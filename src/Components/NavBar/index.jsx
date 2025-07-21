@@ -1,25 +1,16 @@
 import styles from "./index.module.css";
 import { Link, useNavigate } from "react-router-dom"; 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const semesterDocs = {
   
 };
 
-export default function NavBar() {
-  const [hoveredSemester, setHoveredSemester] = useState(null);
-  const [fullscreenSem, setFullscreenSem] = useState(null);
+export default function NavBar(props) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(true);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   let dropdownTimeout;
-
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    console.log("Logged out");
-    navigate("/login");
-  };
 
   useEffect(() => {
     document
@@ -127,7 +118,7 @@ export default function NavBar() {
             </div>
 
             {/*Logout button */}
-            <button className={styles.logoutButton} onClick={handleLogout}>
+            <button className={styles.logoutButton} onClick={props.logOutUser}>
               Logout
             </button>
           </div>

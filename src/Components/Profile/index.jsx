@@ -1,21 +1,16 @@
 import styles from "./index.module.css";
 
 export default function Profile() {
-  const user = {
-    name: "K Vyshnavi",
-    roll: "121423408008",
-    email: "121423408008@josephscollege.ac.in",
-    dept: "BBA-IT",
-    semester: "5th",
-    // attendance: "99%",
-    gpa: "9.11",
-  };
+
+  const userDataJSON = localStorage.getItem('userData');
+  const user = JSON.parse(userDataJSON);
+  console.log(user);
 
   return (
     <>
       <div className={styles.curvedBackground}></div>
       <div className={styles.profileContainer}>
-        <h1 className={styles.profileHeading}>Student Profile</h1>
+        <h1 className={styles.profileHeading}>Profile</h1>
 
         <div className={styles.profileLayout}>
           <div className={styles.profileCard}>
@@ -32,7 +27,8 @@ export default function Profile() {
               <p>Roll No: {user.roll}</p>
               <p>Email: {user.email}</p>
               <p>Department: {user.dept}</p>
-              <p>Semester: {user.semester}</p>
+              <p>Specialization: {user.specialization}</p>
+              <p>Current Semester: {user.current_sem}</p>
 
               <button className={styles.editButton}>Edit Profile</button>
             </div>

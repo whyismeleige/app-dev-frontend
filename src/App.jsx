@@ -1,5 +1,4 @@
-import Profile from "./Components/Profile";
-import Login from './Components/Login';
+import Login from "./Components/Login";
 import ForgetPass from "./Components/ForgetPass";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { useState } from "react";
@@ -9,6 +8,17 @@ export default function App() {
   const [clientToken, setClientToken] = useState(
     localStorage.getItem("clientToken")
   );
+
+  const setUserData = (data) => {
+    localStorage.setItem("userData", JSON.stringify(data));
+  };
+
+  const logOutUser = () => {
+    setClientToken(null);
+    localStorage.removeItem("clientToken");
+    localStorage.removeItem("userData");
+  };
+
   const setToken = (token) => {
     setClientToken(token);
     localStorage.setItem("clientToken", token);
@@ -19,10 +29,13 @@ export default function App() {
       <Routes>
         <Route
           path="*"
-          // element={
-          //   clientToken ? <UserHome /> : <Login setClientToken={setToken} />
-          // }
-          element={<UserHome/>}
+          element={
+            clientToken ? (
+              <UserHome logOutUser={logOutUser}/>
+            ) : (
+              <Login setClientToken={setToken} setUserData={setUserData} />
+            )
+          }
         />
         <Route path="/forget-password" element={<ForgetPass />} />
       </Routes>

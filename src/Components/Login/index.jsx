@@ -1,7 +1,6 @@
 import styles from "./index.module.css";
 import { IoMail } from "react-icons/io5";
 import { RiLockPasswordFill } from "react-icons/ri";
-import Iridescence from "../../Utils/Iridescence";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -29,6 +28,16 @@ const verifyOtp = async (credentials) => {
   }).then((data) => data.json());
 };
 
+const getUserData = async (hallTicketNo) => {
+  return fetch(`${SERVER_URL}/api/get-user-data`,{
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(hallTicketNo)
+  }).then((data) => data.json());
+}
+
 export const LoginForm = (props) => {
   const [hallTicketNo, setHallTicketNo] = useState("");
   const [password, setPassword] = useState("");
@@ -45,10 +54,12 @@ export const LoginForm = (props) => {
       formStep === 1
         ? await loginUser({ email, password })
         : await verifyOtp({ email, otp });
-    console.log(response);
+
     setLoading(false);
     if (response.error) return;
     if (response.token) {
+      const studentData = await getUserData({hallTicketNo});
+      props.setUserData(studentData);
       props.setClientToken(response.token);
       return;
     }

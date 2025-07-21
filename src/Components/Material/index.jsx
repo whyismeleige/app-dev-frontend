@@ -1,7 +1,9 @@
-import React, { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./index.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search as SearchIcon } from "lucide-react";
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 // Subject icons
 const subjectIcons = {
@@ -50,55 +52,46 @@ const subjectIcons = {
     "https://img.icons8.com/fluency/48/artificial-intelligence.png",
 };
 
-const semesters = [
-  "Semester 1",
-  "Semester 2",
-  "Semester 3",
-  "Semester 4",
-  "Semester 5",
-  "Semester 6",
-];
-
-const subjectsBySemester = {
-  "Semester 1": [
-    "Functional English and Basic Computer Skills",
-    "Principles of Management and Organisation (PMOB)",
-    "Fundamentals of Business Economics",
-    "Elements of Information Technology",
-    "Programming with C",
-  ],
-  "Semester 2": [
-    "Environmental Studies",
-    "Functional English",
-    "Principles of Marketing",
-    "Fundamentals of Accounting",
-    "Spreadsheets for Business Decisions",
-    "Python Programming",
-  ],
-  "Semester 3": [
-    "Principles of Human Resource Management",
-    "Legal Aspects of Business",
-    "Cost and Management Accounting",
-    "Business Statistics Using SPSS",
-    "Database Management Systems",
-    "UHVGS",
-  ],
-  "Semester 4": [
-    "Data Analytics",
-    "Research Methodology",
-    "Web Development",
-    "Cybersecurity",
-    "Cloud Computing",
-  ],
-  "Semester 5": ["Digital Marketing", "Power BI", "Finance", "HR", "Marketing"],
-  "Semester 6": [
-    "Entrepreneurship Development",
-    "E-Commerce",
-    "Advanced Excel",
-    "Startup Management",
-    "AI in Business",
-  ],
-};
+// const subjectsBySemester = {
+//   "Semester 1": [
+//     "Functional English and Basic Computer Skills",
+//     "Principles of Management and Organisation (PMOB)",
+//     "Fundamentals of Business Economics",
+//     "Elements of Information Technology",
+//     "Programming with C",
+//   ],
+//   "Semester 2": [
+//     "Environmental Studies",
+//     "Functional English",
+//     "Principles of Marketing",
+//     "Fundamentals of Accounting",
+//     "Spreadsheets for Business Decisions",
+//     "Python Programming",
+//   ],
+//   "Semester 3": [
+//     "Principles of Human Resource Management",
+//     "Legal Aspects of Business",
+//     "Cost and Management Accounting",
+//     "Business Statistics Using SPSS",
+//     "Database Management Systems",
+//     "UHVGS",
+//   ],
+//   "Semester 4": [
+//     "Data Analytics",
+//     "Research Methodology",
+//     "Web Development",
+//     "Cybersecurity",
+//     "Cloud Computing",
+//   ],
+//   "Semester 5": ["Digital Marketing", "Power BI", "Finance", "HR", "Marketing"],
+//   "Semester 6": [
+//     "Entrepreneurship Development",
+//     "E-Commerce",
+//     "Advanced Excel",
+//     "Startup Management",
+//     "AI in Business",
+//   ],
+// };
 
 const materialsData = {
   "Digital Marketing": [
@@ -162,28 +155,58 @@ const materialsData = {
   UHVGS: [],
 };
 
+const getSemesterData = async (credentials) => {
+  return fetch(`${SERVER_URL}/api/users/get-semesters`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+};
+
 export default function Materials() {
   const [previewFile, setPreviewFile] = useState(null);
   const [hoveredButton, setHoveredButton] = useState(null);
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const previewTimeout = useRef(null);
+  const [semesterList, setSemesterList] = useState([]);
+  const [subjectsBySemester, setSubjectsBySemester] = useState({});  const previewTimeout = useRef(null);
 
   const handleBack = () => {
     if (selectedSubject) setSelectedSubject(null);
     else if (selectedSemester) setSelectedSemester(null);
   };
+  const studentDataJSON = localStorage.getItem("userData");
+  const {dept,specialization,year} = JSON.parse(studentDataJSON);
+  
+  useEffect(() => {
+    const SemesterData = async () => {
+      const semesterData = await getSemesterData(
+        {
+          dept,
+          specialization,
+          year
+        }
+      );
+      console.log(semesterData);
+      setSemesterList(Object.keys(semesterData[0].data));
+      setSubjectsBySemester(semesterData[0].data);
+    };
+
+    SemesterData();
+  }, []);
 
   const view = selectedSubject
     ? "materials"
     : selectedSemester
     ? "subjects"
-    : "semesters";
+    : "semesterList";
 
   const list =
-    view === "semesters"
-      ? semesters.filter((s) =>
+    view === "semesterList"
+      ? semesterList.filter((s) =>
           s.toLowerCase().includes(searchTerm.toLowerCase())
         )
       : view === "subjects"
@@ -196,10 +219,10 @@ export default function Materials() {
 
   return (
     <div className={styles.fullScreen}>
-      <div className={styles.curvedBackground}></div>
+        <div className={styles.curvedBackground}></div>
 
       <h2 className={styles.heading}>
-        {view === "semesters" && "Materials"}
+        {view === "semesterList" && "Materials"}
         {view === "subjects" && selectedSemester}
         {view === "materials" && selectedSubject}
       </h2>
@@ -233,7 +256,7 @@ export default function Materials() {
           )}
 
           {/* SEMESTERS */}
-          {view === "semesters" &&
+          {view === "semesterList" &&
             list.map((sem) => (
               <div
                 key={sem}
