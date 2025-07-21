@@ -204,6 +204,13 @@ const ChatGPTLikeComponent = () => {
         )}
 
         <div className={styles.messages}>
+          {currentChatIndex === null && (
+            <div className={styles.welcomeMessage}>
+              <h1>Welcome</h1>
+              <p>You can ask me anything...</p>
+            </div>
+          )}
+
           {currentChatIndex !== null &&
             chatList[currentChatIndex]?.messages?.map((msg, idx) => (
               <div
@@ -225,6 +232,7 @@ const ChatGPTLikeComponent = () => {
               </div>
             </div>
           )}
+
           <div ref={messagesEndRef} />
         </div>
 

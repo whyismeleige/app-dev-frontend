@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./index.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search as SearchIcon } from "lucide-react";
@@ -163,9 +163,12 @@ const materialsData = {
 };
 
 export default function Materials() {
+  const [previewFile, setPreviewFile] = useState(null);
+  const [hoveredButton, setHoveredButton] = useState(null);
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const previewTimeout = useRef(null);
 
   const handleBack = () => {
     if (selectedSubject) setSelectedSubject(null);
@@ -193,7 +196,8 @@ export default function Materials() {
 
   return (
     <div className={styles.fullScreen}>
-    <div className={styles.curvedBackground}></div>
+      <div className={styles.curvedBackground}></div>
+
       <h2 className={styles.heading}>
         {view === "semesters" && "Materials"}
         {view === "subjects" && selectedSemester}
@@ -228,6 +232,7 @@ export default function Materials() {
             <p className={styles.noResults}>No items found</p>
           )}
 
+          {/* SEMESTERS */}
           {view === "semesters" &&
             list.map((sem) => (
               <div
@@ -247,6 +252,7 @@ export default function Materials() {
               </div>
             ))}
 
+          {/* SUBJECTS */}
           {view === "subjects" &&
             list.map((subj) => (
               <div
@@ -270,20 +276,65 @@ export default function Materials() {
             ))}
 
           {view === "materials" &&
-            list.map((file, idx) => (
-              <div key={idx} className={styles.card} title={file}>
-                <img
-                  src={getIcon(file)}
-                  className={styles.fileIcon}
-                  alt="file"
-                />
-                <p className={styles.fileName}>{file}</p>
-                <div className={styles.actions}>
-                  <button className={styles.btn}>Preview</button>
-                  <button className={styles.btn}>Download</button>
+            list.map((file, idx) => {
+              const isHovered = hoveredButton === idx;
+
+              return (
+                <div key={idx} style={{ position: "relative" }}>
+                  <div className={styles.card} title={file}>
+                    <img
+                      src={getIcon(file)}
+                      className={styles.fileIcon}
+                      alt="file"
+                    />
+                    <p className={styles.fileName}>{file}</p>
+
+                    <div className={styles.actions}>
+                      <div
+                        className={styles.previewWrapper}
+                        onMouseEnter={() => {
+                          clearTimeout(previewTimeout.current);
+                          setHoveredButton(idx);
+                          setPreviewFile(file);
+                        }}
+                        onMouseLeave={() => {
+                          previewTimeout.current = setTimeout(() => {
+                            setHoveredButton(null);
+                            setPreviewFile(null);
+                          }, 300);
+                        }}
+                      >
+                        <button className={styles.btn}>Preview</button>
+                      </div>
+
+                      <button className={styles.btn}>Download</button>
+                    </div>
+                  </div>
+
+                  {isHovered && (
+                    <div
+                      className={styles.previewTooltip}
+                      onMouseEnter={() => clearTimeout(previewTimeout.current)}
+                      onMouseLeave={() => {
+                        previewTimeout.current = setTimeout(() => {
+                          setHoveredButton(null);
+                          setPreviewFile(null);
+                        }, 300);
+                      }}
+                    >
+                      <img
+                        src="https://via.placeholder.com/160x100.png?text=File+Preview"
+                        alt="Preview"
+                        className={styles.previewImage}
+                      />
+                      <span className={styles.previewText}>
+                        Preview of {file}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
         </motion.div>
       </AnimatePresence>
     </div>

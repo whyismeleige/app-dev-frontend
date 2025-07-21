@@ -31,33 +31,7 @@
     transform: translateY(0);
   }
 }
-.curvedBackground {
-  position: fixed;
-  bottom: -140px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 180%;
-  height: 420px;
-  background: radial-gradient(circle at center, rgba(0, 64, 255, 0.2), transparent 70%);
-  box-shadow: 0 0 250px 120px rgba(0, 64, 255, 0.3);
-  filter: blur(60px);
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
-  transition: all 1s ease-in-out;
-  animation: pulseGlow 8s ease-in-out infinite;
-}
 
-@keyframes pulseGlow {
-  0%, 100% {
-    transform: translateX(-50%) scale(1);
-    opacity: 0.9;
-  }
-  50% {
-    transform: translateX(-50%) scale(1.06);
-    opacity: 1;
-  }
-}
 /* SIDEBAR BASE */
 .sidebar {
   width: 260px;
@@ -478,5 +452,64 @@
 
   .menuBtn {
     display: block;
+  }
+}
+.welcomeMessage {
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 30px 25px;
+  border-radius: 24px;
+  background: rgba(0, 0, 50, 0.3);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: var(--white);
+  animation: fadeIn 0.6s ease-in;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.welcomeMessage h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  background: linear-gradient(90deg, #00bfff, #0044ff, #00bfff);
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-shadow: 0 0 15px rgba(0, 68, 255, 0.6);
+  animation: textGlow 4s ease-in-out infinite;
+}
+
+.welcomeMessage p {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  text-shadow: 0 0 10px rgba(0, 68, 255, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textGlow {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
   }
 }
