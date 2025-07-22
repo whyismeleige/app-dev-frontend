@@ -273,7 +273,143 @@ body {
   box-shadow: 0 0 20px rgba(0, 175, 255, 0.25),
               inset 0 0 10px rgba(60, 104, 255, 0.12);
 }
+.calculatorCard form > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 18px;
+  width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
 
+/* === Label Styling === */
+.calculatorCard label {
+  font-size: 1rem;
+  color: #bcd6ff;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(0, 117, 255, 0.3);
+  margin-right: 12px;
+  white-space: nowrap;
+}
+
+/* === Input Fields === */
+.calculatorCard input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(0, 0, 50, 0.4);
+  backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 10px rgba(0, 117, 255, 0.15);
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+.calculatorCard input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 10px rgba(0, 117, 255, 0.6),
+              inset 0 0 12px rgba(0, 117, 255, 0.2);
+  outline: none;
+}
+
+/* === Responsive Layout === */
+@media (max-width: 600px) {
+  .calculatorCard form > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .calculatorCard label,
+  .calculatorCard input {
+    width: 100%;
+  }
+}
+
+
+/* === Date Picker Popup Styling === */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(2) drop-shadow(0 0 4px #007bff);
+  cursor: pointer;
+}
+
+/* === Style number input arrows instead of hiding === */
+.calculatorCard input[type="number"]::-webkit-inner-spin-button,
+.calculatorCard input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: inner-spin-button !important;
+  appearance: auto;
+  background: linear-gradient(to bottom, #0033cc, #007bff);
+  border-radius: 50%;
+  height: 16px;
+  width: 16px;
+  margin: 0 4px;
+  box-shadow: 0 0 4px rgba(0, 117, 255, 0.5);
+  cursor: pointer;
+}
+
+.calculatorCard input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  padding-right: 12px; /* add space to avoid overlapping arrows */
+}
+
+/* === Submit Button Glow === */
+.calculatorCard button {
+  margin-top: 25px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #007bff, #0033cc);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(0, 117, 255, 0.6);
+  transition: all 0.3s ease;
+}
+
+.calculatorCard button:hover {
+  background: linear-gradient(135deg, #0055ff, #001199);
+  box-shadow: 0 0 18px rgba(0, 117, 255, 0.9);
+}
+
+/* === Responsive Layout === */
+@media (max-width: 600px) {
+  .calculatorCard form > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .calculatorCard label,
+  .calculatorCard input {
+    width: 100%;
+  }
+}
+.calculatorCard input[type="date"] {
+  appearance: none;
+  background-color: rgba(0, 0, 50, 0.4);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 10px rgba(0, 117, 255, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.calculatorCard input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(2) drop-shadow(0 0 4px #007bff);
+  cursor: pointer;
+  padding-left: 8px;
+  height: 22px;
+  width: 22px;
+}
 
 /* === Animations === */
 @keyframes fadeInUp {

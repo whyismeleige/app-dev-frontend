@@ -4,17 +4,20 @@ import Profile from "../Profile";
 import Material from "../Material";
 import ChatGPT from "../ChatGPT";
 import Attendance from '../Attendance';
-import { Routes, Route, Outlet} from "react-router-dom";
+import Chats from "../Chats";
+import styles from './index.module.css';
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 
-export default function UserHome(props) {
+export default function UserHome() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<><NavBar logOutUser={props.logOutUser}/><ChatBot /><Outlet /></>}>
+        <Route path="/" element={<><NavBar /><ChatBot /><Outlet /></>}>
           <Route path="profile" element={<Profile />} />
           <Route path="material" element={<Material />} />
-          <Route path="chatgpt" element={<ChatGPT />} />
+          <Route path="/chatgpt" element={<ChatGPT />} />
           <Route path="attendance" element={<Attendance />} />
+          <Route path="chats" element={<Chats />} />
         </Route>
       </Routes>
     </>

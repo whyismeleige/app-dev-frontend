@@ -76,9 +76,9 @@ export default function NavBar(props) {
             <li>
               <Link to="/attendance">Attendance</Link>
             </li>
-            {/* <li>
+            <li>
               <Link to="/chats">Live Chats</Link>
-            </li> */}
+            </li>
             <li>
               <Link to="/chatgpt">ChatGPT</Link>
             </li>

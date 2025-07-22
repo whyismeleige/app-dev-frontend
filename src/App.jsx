@@ -30,11 +30,11 @@ export default function App() {
         <Route
           path="*"
           element={
-            clientToken ? (
+            // clientToken ? (
               <UserHome logOutUser={logOutUser}/>
-            ) : (
-              <Login setClientToken={setToken} setUserData={setUserData} />
-            )
+            // ) : (
+            //   <Login setClientToken={setToken} setUserData={setUserData} />
+            // )
           }
         />
         <Route path="/forget-password" element={<ForgetPass />} />
