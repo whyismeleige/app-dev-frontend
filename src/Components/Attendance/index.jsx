@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import styles from "./index.module.css";
 import clsx from "clsx";
 
@@ -7,6 +7,8 @@ const endMonth = 9; // October
 const startDate = 11;
 const endDate = 15;
 let gazettedHolidays;
+
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const url = process.env.REACT_APP_SERVER_URL;
 
@@ -42,6 +44,11 @@ const generateDates = (totalDays) => {
 
   return result;
 };
+
+const calculateClassesRequired = (e) => {
+  e.preventDefault();
+  
+}
 
 export default function Attendance() {
   const [attendance, setAttendance] = useState({});
@@ -94,19 +101,48 @@ export default function Attendance() {
           <div className={styles.calculatorCard}>
             <h3>Attendance Calculator</h3>
             <div className={styles.calculatorContent}>
-              <p><b>!!!! Neeed tooo change !!!</b></p>
-              <p>Total Working Days: {totalDays.days}</p>
-              <p>Days Present: {totalPresent}</p>
-              <p>Required for 75%: {Math.ceil(totalDays.days * 0.75)}</p>
-              <p>
-                {totalPresent >= Math.ceil(totalDays.days * 0.75)
-                  ? `Can miss ${
-                      totalPresent - Math.ceil(totalDays.days * 0.75)
-                    } more`
-                  : `Need ${
-                      Math.ceil(totalDays.days * 0.75) - totalPresent
-                    } more`}
-              </p>
+              <form onSubmit={calculateClassesRequired}>
+                {days.map((day) => {
+                  return (
+                    <Fragment key={day}>
+                      <label for={day}>{`Enter the Classes of ${day}`}</label>
+                      <input type="number" name={day} required />
+                      <br></br>
+                    </Fragment>
+                  );
+                })}
+                <label for="joining_date">
+                  Enter your Joining Date (MM-DD-YYYY):
+                </label>
+                <input type="date" id="joining_date" name="joining_date" />
+                <br />
+                <label for="end_date">
+                  Enter your end date of semester (MM-DD-YYYY):
+                </label>
+                <input type="date" id="end_date" name="end_date" />
+                <br />
+                <label for="current_attendance">
+                  What is your current attendance (in %)?
+                </label>
+                <input
+                  type="number"
+                  id="current_attendance"
+                  name="current_attendance"
+                />
+                <br />
+                <label for="cutoff_required">
+                  What percentage is required to write the exam?
+                </label>
+                <input
+                  type="number"
+                  id="cutoff_required"
+                  name="cutoff_required"
+                />
+                <br />
+                <button type="submit">
+                  Submit
+                </button>
+              </form>
             </div>
           </div>
 
@@ -142,7 +178,10 @@ export default function Attendance() {
                       {columns.map((column, colIdx) => (
                         <div key={colIdx} className={styles.weekColumn}>
                           {column.map((dateStr, rowIdx) => {
-                            if (!dateStr) return <div key={rowIdx} className={styles.emptyBox} />;
+                            if (!dateStr)
+                              return (
+                                <div key={rowIdx} className={styles.emptyBox} />
+                              );
 
                             const dateObj = new Date(dateStr);
                             const isWeekend =
