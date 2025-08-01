@@ -8,7 +8,7 @@ const startDate = 11;
 const endDate = 15;
 let gazettedHolidays;
 
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
 
 const url = process.env.REACT_APP_SERVER_URL;
 
@@ -45,9 +45,42 @@ const generateDates = (totalDays) => {
   return result;
 };
 
+const weeksBetween = (start_date,end_date) => {
+  const oneWeek = 1000 * 60 * 60 * 24 * 7;
+  const delta = end_date - start_date;
+  return Math.floor(delta/oneWeek);
+}
+
 const calculateClassesRequired = (e) => {
   e.preventDefault();
+  let total
+  const formData = new FormData(e.target);
+  const daysData = days.map(day => {
+    const value = parseInt(formData.get(day));
+    total += value;
+    return value;
+  })
   
+  const avg = total/5;
+
+  const joining_date = new Date(formData.get('joining_date'));
+  const end_date = new Date(formData.get('end_date'));
+  const current_date = new Date();
+
+  const weeks_done = weeksBetween(joining_date,current_date);
+  const weeks_left = weeksBetween(current_date,end_date);
+  const today_total_classes = weeks_done * total;
+
+  const current_attendance = parseInt(formData.get('current_attendance'));
+  const cutoff_required = parseInt(formData.get('cutoff_required'));
+  const current_classes_attended = (current_attendance/100) * today_total_classes;
+
+  const classes_left = weeks_left * total;
+  const total_classes = today_total_classes + classes_left;
+  const classes_cutoff = (cutoff_required/100) * total_classes;
+  const added_classes = current_classes_attended + classes_left;
+  const max_attendance = (added_classes / total_classes) * 100;
+
 }
 
 export default function Attendance() {
