@@ -513,3 +513,36 @@
     background-position: 0% center;
   }
 }
+@media screen and (max-width: 480px) {
+  .welcomeMessage {
+    margin: 60px 20px;
+    padding: 20px;
+  }
+
+  .welcomeMessage h1 {
+    font-size: 1.8rem;
+  }
+
+  .welcomeMessage p {
+    font-size: 1rem;
+  }
+}
+/* ===== Responsive Sidebar ===== */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 70px; /* 👈 pushes it below the navbar */
+    height: calc(100vh - 70px); /* 👈 adjusts height to avoid overflow */
+    left: 0;
+    width: 240px;
+    transform: translateX(-100%);
+    z-index: 999;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.slideInLeft {
+    transform: translateX(0%);
+  }
+}

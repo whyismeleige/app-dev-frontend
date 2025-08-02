@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import styles from "./index.module.css";
 import clsx from "clsx";
 
@@ -45,46 +45,17 @@ const generateDates = (totalDays) => {
   return result;
 };
 
-const weeksBetween = (start_date,end_date) => {
+const weeksBetween = (start_date, end_date) => {
   const oneWeek = 1000 * 60 * 60 * 24 * 7;
   const delta = end_date - start_date;
-  return Math.floor(delta/oneWeek);
-}
-
-const calculateClassesRequired = (e) => {
-  e.preventDefault();
-  let total
-  const formData = new FormData(e.target);
-  const daysData = days.map(day => {
-    const value = parseInt(formData.get(day));
-    total += value;
-    return value;
-  })
-  
-  const avg = total/5;
-
-  const joining_date = new Date(formData.get('joining_date'));
-  const end_date = new Date(formData.get('end_date'));
-  const current_date = new Date();
-
-  const weeks_done = weeksBetween(joining_date,current_date);
-  const weeks_left = weeksBetween(current_date,end_date);
-  const today_total_classes = weeks_done * total;
-
-  const current_attendance = parseInt(formData.get('current_attendance'));
-  const cutoff_required = parseInt(formData.get('cutoff_required'));
-  const current_classes_attended = (current_attendance/100) * today_total_classes;
-
-  const classes_left = weeks_left * total;
-  const total_classes = today_total_classes + classes_left;
-  const classes_cutoff = (cutoff_required/100) * total_classes;
-  const added_classes = current_classes_attended + classes_left;
-  const max_attendance = (added_classes / total_classes) * 100;
-
-}
+  return Math.floor(delta / oneWeek);
+};
 
 export default function Attendance() {
   const [attendance, setAttendance] = useState({});
+  const [showResult, setShowResult] = useState(false);
+  const [resultData, setResultData] = useState(null);
+  const resultRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,6 +82,56 @@ export default function Attendance() {
   const totalPresent = Object.values(attendance).filter(Boolean).length;
   const holidays = totalDays.days - totalPresent;
 
+  const calculateClassesRequired = (e) => {
+    e.preventDefault();
+    let total = 0;
+    const formData = new FormData(e.target);
+    const daysData = days.map((day) => {
+      const value = parseInt(formData.get(day));
+      total += value;
+      return value;
+    });
+
+    const avg = total / 5;
+    const joining_date = new Date(formData.get("joining_date"));
+    const end_date = new Date(formData.get("end_date"));
+    const current_date = new Date();
+
+    const weeks_done = weeksBetween(joining_date, current_date);
+    const weeks_left = weeksBetween(current_date, end_date);
+    const today_total_classes = weeks_done * total;
+
+    const current_attendance = parseInt(formData.get("current_attendance"));
+    const cutoff_required = parseInt(formData.get("cutoff_required"));
+    const current_classes_attended =
+      (current_attendance / 100) * today_total_classes;
+
+    const classes_left = weeks_left * total;
+    const total_classes = today_total_classes + classes_left;
+    const classes_cutoff = (cutoff_required / 100) * total_classes;
+    const added_classes = current_classes_attended + classes_left;
+    const max_attendance = (added_classes / total_classes) * 100;
+
+    const canSkip = Math.floor(added_classes - classes_cutoff);
+    const message = canSkip >= 0
+      ? `(resulttt will be displayed here )You can skip ${canSkip} more ${canSkip === 1 ? "class" : "classes"} and still meet the cutoff.`
+      : `You need to attend all upcoming classes to meet the required cutoff.`;
+
+    setResultData({
+      message,
+    });
+
+    setShowResult(true);
+
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+  };
+
+  const handleGoBack = () => {
+    setShowResult(false);
+  };
+
   return (
     <>
       <div className={styles.curvedBackground}></div>
@@ -118,43 +139,38 @@ export default function Attendance() {
         <h1 className={styles.profileHeading}>Attendance Tracker</h1>
 
         <div className={styles.profileLayout}>
-          {/* Days Present Card */}
           <div className={styles.attendanceCardStatBox}>
             <h3>Days Present</h3>
             <p className={styles.statValue}>{totalPresent}</p>
           </div>
 
-          {/* Holidays Taken Card */}
           <div className={styles.gpaCardStatBox}>
             <h3>Holidays Taken</h3>
             <p className={styles.statValue}>{holidays}</p>
           </div>
 
-          {/* Attendance Calculator Card */}
           <div className={styles.calculatorCard}>
             <h3>Attendance Calculator</h3>
             <div className={styles.calculatorContent}>
               <form onSubmit={calculateClassesRequired}>
-                {days.map((day) => {
-                  return (
-                    <Fragment key={day}>
-                      <label for={day}>{`Enter the Classes of ${day}`}</label>
-                      <input type="number" name={day} required />
-                      <br></br>
-                    </Fragment>
-                  );
-                })}
-                <label for="joining_date">
+                {days.map((day) => (
+                  <Fragment key={day}>
+                    <label htmlFor={day}>{`Enter the Classes of ${day}`}</label>
+                    <input type="number" name={day} required />
+                    <br />
+                  </Fragment>
+                ))}
+                <label htmlFor="joining_date">
                   Enter your Joining Date (MM-DD-YYYY):
                 </label>
                 <input type="date" id="joining_date" name="joining_date" />
                 <br />
-                <label for="end_date">
+                <label htmlFor="end_date">
                   Enter your end date of semester (MM-DD-YYYY):
                 </label>
                 <input type="date" id="end_date" name="end_date" />
                 <br />
-                <label for="current_attendance">
+                <label htmlFor="current_attendance">
                   What is your current attendance (in %)?
                 </label>
                 <input
@@ -163,7 +179,7 @@ export default function Attendance() {
                   name="current_attendance"
                 />
                 <br />
-                <label for="cutoff_required">
+                <label htmlFor="cutoff_required">
                   What percentage is required to write the exam?
                 </label>
                 <input
@@ -172,19 +188,30 @@ export default function Attendance() {
                   name="cutoff_required"
                 />
                 <br />
-                <button type="submit">
-                  Submit
-                </button>
+                {!showResult && (
+                  <div className={styles.buttonWrapper}>
+                    <button type="submit" className={styles.submitBtn}>
+                      Submit
+                    </button>
+                  </div>
+                )}
               </form>
+
+              {showResult && resultData && (
+                <div ref={resultRef} className={styles.resultCard}>
+                  <p className={styles.resultMessage}>{resultData.message}</p>
+                  <button className={styles.goBackBtn} onClick={handleGoBack}>
+                    Go Back
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Attendance Calendar Card */}
           <div className={styles.profileCard}>
             <h3>Attendance Calendar</h3>
             <div className={styles.attendanceGridWrapper}>
               {Object.entries(datesByMonth).map(([month, dates]) => {
-                // Build weekly columns
                 const columns = [];
                 let currentColumn = new Array(7).fill(null);
 

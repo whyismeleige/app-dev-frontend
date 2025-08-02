@@ -64,7 +64,6 @@ body {
   position: relative;
 }
 
-
 /* === Card Base === */
 .profileCard,
 .attendanceCardStatBox,
@@ -121,7 +120,8 @@ body {
 /* === Card Hover === */
 .profileCard:hover,
 .attendanceCardStatBox:hover,
-.gpaCardStatBox:hover {
+.gpaCardStatBox:hover,
+.calculatorCard:hover {
   transform: scale(1.03);
   box-shadow: 0 0 20px rgba(0, 175, 255, 0.25),
               inset 0 0 10px rgba(60, 104, 255, 0.12);
@@ -157,7 +157,7 @@ body {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #b0b0d0;
+  color: #ffffff;
 }
 
 .weekColumns {
@@ -201,7 +201,6 @@ body {
   transition: opacity 0.2s ease;
 }
 
-
 .dayCheckbox:checked {
   background-color: #0075ff;
   box-shadow: 0 0 12px rgba(0, 117, 255, 0.8);
@@ -224,7 +223,7 @@ body {
   padding: 4px 8px;
   position: absolute;
   z-index: 1;
-  bottom: 125%; /* Show above the element */
+  bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
@@ -237,7 +236,6 @@ body {
   opacity: 1;
 }
 
-/* Weekend Checkbox */
 .weekendCheckbox{
   background-color: rgba(255, 0 , 0, 0.5) !important;
   box-shadow: 0 0 8px rgba(255, 0, 0, 0.6) !important;
@@ -249,6 +247,7 @@ body {
   height: 16px;
   background-color: transparent;
 }
+
 /* Attendence Calculator */
 .calculatorCard {
   grid-area: calculator;
@@ -267,11 +266,10 @@ body {
   box-shadow: none;
   background: linear-gradient(to top, black, #1f2cbd);
 }
-
 .calculatorCard:hover {
   transform: scale(1.03);
   box-shadow: 0 0 20px rgba(0, 175, 255, 0.25),
-              inset 0 0 10px rgba(60, 104, 255, 0.12);
+    inset 0 0 10px rgba(60, 104, 255, 0.12);
 }
 .calculatorCard form > div {
   display: flex;
@@ -283,18 +281,18 @@ body {
   width: 100%;
   padding: 8px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
 
+}
 /* === Label Styling === */
 .calculatorCard label {
   font-size: 1rem;
   color: #bcd6ff;
   font-weight: 600;
   text-shadow: 0 0 4px rgba(0, 117, 255, 0.3);
+  margin-top: 100px;
   margin-right: 12px;
   white-space: nowrap;
 }
-
 /* === Input Fields === */
 .calculatorCard input {
   flex: 1;
@@ -309,14 +307,12 @@ body {
   transition: all 0.3s ease;
   min-width: 180px;
 }
-
 .calculatorCard input:focus {
   border-color: #007bff;
   box-shadow: 0 0 10px rgba(0, 117, 255, 0.6),
-              inset 0 0 12px rgba(0, 117, 255, 0.2);
+    inset 0 0 12px rgba(0, 117, 255, 0.2);
   outline: none;
 }
-
 /* === Responsive Layout === */
 @media (max-width: 600px) {
   .calculatorCard form > div {
@@ -329,7 +325,6 @@ body {
     width: 100%;
   }
 }
-
 
 /* === Date Picker Popup Styling === */
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -361,6 +356,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .calculatorCard button {
   margin-top: 25px;
   padding: 12px 28px;
+  margin:0 auto;
   background: linear-gradient(135deg, #007bff, #0033cc);
   color: #fff;
   font-weight: 600;
@@ -371,12 +367,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   box-shadow: 0 0 14px rgba(0, 117, 255, 0.6);
   transition: all 0.3s ease;
 }
-
 .calculatorCard button:hover {
   background: linear-gradient(135deg, #0055ff, #001199);
   box-shadow: 0 0 18px rgba(0, 117, 255, 0.9);
 }
-
 /* === Responsive Layout === */
 @media (max-width: 600px) {
   .calculatorCard form > div {
@@ -410,6 +404,68 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   height: 22px;
   width: 22px;
 }
+/* === Animations === */
+@keyframes fadeInUp {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fadeInDown {
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 /* === Animations === */
 @keyframes fadeInUp {
@@ -456,7 +512,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     grid-template-areas:
       "attendance"
       "holidays"
-      "calendar";
+      "calendar"
+      "calculator";
     gap: 16px;
   }
 
@@ -476,7 +533,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   .attendanceCardStatBox,
   .gpaCardStatBox,
-  .profileCard {
+  .profileCard,
+  .calculatorCard {
     padding: 1.5rem;
   }
 
@@ -530,7 +588,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   .attendanceCardStatBox,
   .gpaCardStatBox,
-  .profileCard {
+  .profileCard,
+  .calculatorCard {
     padding: 1rem;
   }
 
@@ -542,5 +601,310 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   .emptyBox {
     width: 8px;
     height: 8px;
+  }
+}
+/* === Flip Card Container === */
+.flipCard {
+  perspective: 1000px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.flipCardInner {
+  width: 100%;
+  max-width: 500px;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.flipCardFront,
+.flipCardBack {
+  position: absolute;
+  width: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 30px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(to bottom, black, #1f2cbd);
+}
+.flipCardFront {
+  z-index: 2;
+}
+
+.flipCardBack {
+  transform: rotateY(180deg);
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 117, 255, 0.1),
+    transparent 80%
+  );
+  box-shadow: 0 0 20px rgba(0, 117, 255, 0.3),
+    inset 0 0 20px rgba(0, 117, 255, 0.1);
+}
+/* === Result Text === */
+.resultText {
+  font-size: 1.8rem;
+  color: white;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-shadow: 0 0 6px rgba(0, 117, 255, 0.6);
+}
+/* === Buttons === */
+.submitBtn,
+.goBackBtn {
+  margin-top: 15px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #007bff, #0033cc);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(0, 117, 255, 0.6);
+  transition: all 0.3s ease;
+}
+.submitBtn:hover,
+.goBackBtn:hover {
+  background: linear-gradient(135deg, #0055ff, #001199);
+  box-shadow: 0 0 18px rgba(0, 117, 255, 0.9);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.submitBtn {
+  padding: 1rem 2rem;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #00f260, #0575e6);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+}
+
+.submitBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 200, 0.4);
+}
+
+.flipCard {
+  background-color: transparent;
+  width: 300px;
+  height: 200px;
+  perspective: 1000px;
+}
+
+.flipCardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.flipCardFront,
+.flipCardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.flipCardBack {
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultCard {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  color: #fff;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in;
+}
+
+.resultText {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.goBackBtn {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  background-color: #ff5c5c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.goBackBtn:hover {
+  background-color: #ff1f1f;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes countUp {
+  0% {
+    content: "0";
+  }
+}
+
+.buttonOrResult {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.submitBtn {
+  padding: 12px 28px;
+  font-size: 16px;
+  background-color: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease all;
+}
+
+.submitBtn:hover {
+  background-color: #222;
+  transform: scale(1.05);
+}
+.resultCard {
+  position: relative;
+  background: rgba(0, 10, 60, 0.15);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
+  color: #e3f0ff;
+  text-align: center;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 0 20px rgba(0, 195, 255, 0.3), 0 0 40px rgba(0, 117, 255, 0.2),
+    inset 0 0 15px rgba(0, 117, 255, 0.1);
+  animation: fadeIn 0.5s ease-out;
+  max-width: 500px;
+  margin: 20px auto;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  z-index: 10;
+  transform-style: preserve-3d;
+  animation: flipIn 0.8s ease forwards;
+  backface-visibility: hidden;
+}
+
+.resultCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  padding: 2px;
+  background: linear-gradient(135deg, #00f0ff, #6a00ff, #00ffe0);
+  background-size: 300% 300%;
+  animation: gradientBorder 3.5s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}
+
+.resultText {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 4px #00f0ff, 0 0 10px #00aaff;
+  margin-bottom: 1rem;
+}
+
+.explanation {
+  font-size: 1.05rem;
+  color: #c9e9ff;
+  text-shadow: 0 0 6px rgba(0, 170, 255, 0.2);
+}
+
+/* Hover Effect */
+.resultCard:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 30px rgba(0, 195, 255, 0.5), 0 0 50px rgba(0, 117, 255, 0.35),
+    inset 0 0 20px rgba(0, 117, 255, 0.12);
+}
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gradientBorder {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes flipIn {
+  from {
+    transform: rotateY(90deg) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0deg) scale(1);
+    opacity: 1;
   }
 }
