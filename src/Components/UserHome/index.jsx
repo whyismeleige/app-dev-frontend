@@ -5,7 +5,6 @@ import Material from "../Material";
 import ChatGPT from "../ChatGPT";
 import Attendance from '../Attendance';
 import Chats from "../Chats";
-import styles from './index.module.css';
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 
 export default function UserHome() {
@@ -15,7 +14,7 @@ export default function UserHome() {
         <Route path="/" element={<><NavBar /><ChatBot /><Outlet /></>}>
           <Route path="profile" element={<Profile />} />
           <Route path="material" element={<Material />} />
-          <Route path="/chatgpt" element={<ChatGPT />} />
+          <Route path="chatgpt" element={<ChatGPT />} />
           <Route path="attendance" element={<Attendance />} />
           <Route path="chats" element={<Chats />} />
         </Route>

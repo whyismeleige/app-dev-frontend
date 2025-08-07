@@ -5,7 +5,7 @@
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 40px 30px;
+  padding: 100px 30px;
   box-sizing: border-box;
   color: white;
   font-family: 'Segoe UI', sans-serif;
@@ -148,7 +148,7 @@
 
 .backButton {
   position: absolute;
-  top: 30px;
+  top: 100px;
   left: 30px;
   background: rgba(0, 0, 80, 0.3); /* deeper blue tint for visibility */
   backdrop-filter: blur(12px);
@@ -333,3 +333,88 @@
     transform: translateY(0);
   }
 }
+
+@media (max-width: 576px) {
+  .heading {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .fileName {
+    font-size: 0.85rem;
+  }
+
+  .btn {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+
+  .searchBar input {
+    padding: 10px 14px 10px 38px;
+    font-size: 0.9rem;
+  }
+
+  .backButton {
+    top: 20px;
+    left: 20px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .previewTooltip {
+    left: auto;
+    right: 0;
+    transform: translateY(-50%) translateX(100%);
+    width: 160px;
+  }
+
+  .previewImage {
+    width: 140px;
+    height: 80px;
+  }
+
+  .previewText {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 400px) {
+  .searchBar input {
+    font-size: 0.85rem;
+    padding: 8px 12px 8px 34px;
+  }
+
+  .searchIcon {
+    left: 10px;
+    font-size: 0.85rem;
+  }
+
+  .backButton {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .previewTooltip {
+    width: 140px;
+    padding: 8px;
+  }
+
+  .previewImage {
+    width: 120px;
+    height: 70px;
+  }
+
+  .previewText {
+    font-size: 10px;
+  }
+}
+

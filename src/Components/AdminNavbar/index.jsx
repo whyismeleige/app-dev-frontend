@@ -1,8 +1,8 @@
 import styles from "./index.module.css";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-export default function NavBar(props) {
+export default function AdminBar(props) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(true);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -19,39 +19,21 @@ export default function NavBar(props) {
     setHasNewNotifications(false);
   };
 
-  const handleDropdownEnter = () => {
-    clearTimeout(dropdownTimeout);
-    setIsDropdownVisible(true);
-  };
-
-  const handleDropdownLeave = () => {
-    dropdownTimeout = setTimeout(() => {
-      setIsDropdownVisible(false);
-    }, 1000);
-  };
-
   return (
     <>
       <nav className={styles.topNav}>
-        <div className={styles.navLogo}>MyApp</div>
+        <div className={styles.navLogo}>Admin</div>
 
         <div className={styles.navInner}>
           <ul className={styles.navLinks}>
             <li>
-              <Link to="/home">Home</Link>
+              <Link to="/scraping">Web Scraping</Link>
             </li>
             <li>
-              <Link to="/material">Materials</Link>
-            </li>
-
-            <li>
-              <Link to="/attendance">Attendance</Link>
+              <Link to="/issues">Issues</Link>
             </li>
             <li>
-              <Link to="/chats">Live Chats</Link>
-            </li>
-            <li>
-              <Link to="/chatgpt">ChatGPT</Link>
+              <Link to="/data-change">Modify Data</Link>
             </li>
           </ul>
 

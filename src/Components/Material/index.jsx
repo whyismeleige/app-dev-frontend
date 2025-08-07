@@ -2,160 +2,12 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./index.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search as SearchIcon } from "lucide-react";
+import FileViewer from "../FileViewer";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-// Subject icons
-const subjectIcons = {
-  "Functional English and Basic Computer Skills":
-    "https://img.icons8.com/fluency/48/book.png",
-  PMOB: "https://img.icons8.com/fluency/48/management.png",
-  "Fundamentals of Business Economics":
-    "https://img.icons8.com/fluency/48/economics.png",
-  "Elements of Information Technology":
-    "https://img.icons8.com/fluency/48/computer.png",
-  "Programming with C": "https://img.icons8.com/fluency/48/c-programming.png",
-  "Environmental Studies": "https://img.icons8.com/fluency/48/earth.png",
-  "Principles of Marketing": "https://img.icons8.com/fluency/48/marketing.png",
-  "Fundamentals of Accounting":
-    "https://img.icons8.com/fluency/48/accounting.png",
-  "Spreadsheets for Business Decisions":
-    "https://img.icons8.com/fluency/48/spreadsheet.png",
-  "Python Programming": "https://img.icons8.com/fluency/48/python.png",
-  "Principles of Human Resource Management":
-    "https://img.icons8.com/fluency/48/hr.png",
-  "Legal Aspects of Business": "https://img.icons8.com/fluency/48/law.png",
-  "Cost and Management Accounting":
-    "https://img.icons8.com/fluency/48/cost-accounting.png",
-  "Business Statistics Using SPSS":
-    "https://img.icons8.com/fluency/48/statistics.png",
-  "Database Management Systems":
-    "https://img.icons8.com/fluency/48/database.png",
-  UHVGS: "https://img.icons8.com/fluency/48/ethics.png",
-  "Data Analytics": "https://img.icons8.com/fluency/48/analytics.png",
-  "Research Methodology": "https://img.icons8.com/fluency/48/research.png",
-  "Web Development": "https://img.icons8.com/fluency/48/html-5.png",
-  Cybersecurity: "https://img.icons8.com/fluency/48/security-checked.png",
-  "Cloud Computing": "https://img.icons8.com/fluency/48/cloud.png",
-  "Digital Marketing": "https://img.icons8.com/fluency/48/seo.png",
-  "Power BI": "https://img.icons8.com/fluency/48/business-intelligence.png",
-  Finance: "https://img.icons8.com/fluency/48/finance.png",
-  HR: "https://img.icons8.com/fluency/48/hr.png",
-  Marketing: "https://img.icons8.com/fluency/48/marketing.png",
-  "Entrepreneurship Development":
-    "https://img.icons8.com/fluency/48/startup.png",
-  "E-Commerce": "https://img.icons8.com/fluency/48/online-store.png",
-  "Advanced Excel": "https://img.icons8.com/fluency/48/excel.png",
-  "Startup Management":
-    "https://img.icons8.com/fluency/48/entrepreneurship.png",
-  "AI in Business":
-    "https://img.icons8.com/fluency/48/artificial-intelligence.png",
-};
-
-// const subjectsBySemester = {
-//   "Semester 1": [
-//     "Functional English and Basic Computer Skills",
-//     "Principles of Management and Organisation (PMOB)",
-//     "Fundamentals of Business Economics",
-//     "Elements of Information Technology",
-//     "Programming with C",
-//   ],
-//   "Semester 2": [
-//     "Environmental Studies",
-//     "Functional English",
-//     "Principles of Marketing",
-//     "Fundamentals of Accounting",
-//     "Spreadsheets for Business Decisions",
-//     "Python Programming",
-//   ],
-//   "Semester 3": [
-//     "Principles of Human Resource Management",
-//     "Legal Aspects of Business",
-//     "Cost and Management Accounting",
-//     "Business Statistics Using SPSS",
-//     "Database Management Systems",
-//     "UHVGS",
-//   ],
-//   "Semester 4": [
-//     "Data Analytics",
-//     "Research Methodology",
-//     "Web Development",
-//     "Cybersecurity",
-//     "Cloud Computing",
-//   ],
-//   "Semester 5": ["Digital Marketing", "Power BI", "Finance", "HR", "Marketing"],
-//   "Semester 6": [
-//     "Entrepreneurship Development",
-//     "E-Commerce",
-//     "Advanced Excel",
-//     "Startup Management",
-//     "AI in Business",
-//   ],
-// };
-
-const materialsData = {
-  "Digital Marketing": [
-    "SEO Tips.pdf",
-    "Content Strategy.pptx",
-    "Campaign Report.docx",
-  ],
-  "Power BI": ["BI Dashboard.pptx", "Power BI Notes.pdf", "Data Models.xlsx"],
-  Finance: [
-    "Finance Notes.pdf",
-    "Equity Analysis.pptx",
-    "Budget Planning.docx",
-    "Fin Elective 1.pdf",
-    "Fin Elective 2.pptx",
-    "Fin Elective 3.xlsx",
-  ],
-  HR: [
-    "HR Notes.pdf",
-    "Employee Engagement.pptx",
-    "Recruitment Guide.docx",
-    "HR Elective 1.pdf",
-    "HR Elective 2.pptx",
-    "HR Elective 3.xlsx",
-  ],
-  Marketing: [
-    "Marketing Notes.pdf",
-    "Brand Strategy.pptx",
-    "Consumer Behaviour.docx",
-    "Mkt Elective 1.pdf",
-    "Mkt Elective 2.pptx",
-    "Mkt Elective 3.xlsx",
-  ],
-  "Data Analytics": ["DA Intro.pdf", "Case Study.pptx"],
-  "Research Methodology": ["ResearchDesign.docx", "SurveyData.xlsx"],
-  "Web Development": ["HTML CSS Guide.pdf", "React Guide.docx"],
-  Cybersecurity: ["Security Concepts.pdf", "Threat Report.pptx"],
-  "Cloud Computing": ["AWS Overview.pdf"],
-  "Entrepreneurship Development": [
-    "StartupGuide.pdf",
-    "BusinessModelCanvas.pptx",
-  ],
-  "E-Commerce": ["EcomTrends.pdf", "EcommerceLaw.docx"],
-  "Advanced Excel": ["PivotTables.xlsx", "MacrosGuide.pdf"],
-  "Startup Management": ["VentureCapital.docx", "PitchDeck.pptx"],
-  "AI in Business": ["AIUseCases.pdf", "AIBusinessStrategy.pptx"],
-  "Principles of Management and Organisation (PMOB)": [],
-  "Fundamentals of Business Economics": [],
-  "Elements of Information Technology": [],
-  "Programming with C": [],
-  "Environmental Studies": [],
-  "Functional English": [],
-  "Principles of Marketing": [],
-  "Fundamentals of Accounting": [],
-  "Spreadsheets for Business Decisions": [],
-  "Python Programming": [],
-  "Principles of Human Resource Management": [],
-  "Legal Aspects of Business": [],
-  "Cost and Management Accounting": [],
-  "Business Statistics Using SPSS": [],
-  "Database Management Systems": [],
-  UHVGS: [],
-};
-
 const getSemesterData = async (credentials) => {
+  console.log("Fetching");
   return fetch(`${SERVER_URL}/api/users/get-semesters`, {
     method: "POST",
     headers: {
@@ -165,31 +17,49 @@ const getSemesterData = async (credentials) => {
   }).then((data) => data.json());
 };
 
+const getMaterialsData = async (subject) => {
+  return fetch(`${SERVER_URL}/api/materials`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(subject),
+  }).then((data) => data.json());
+};
+
 export default function Materials() {
-  const [previewFile, setPreviewFile] = useState(null);
-  const [hoveredButton, setHoveredButton] = useState(null);
+  // const [previewFile, setPreviewFile] = useState(null);
+  // const [hoveredButton, setHoveredButton] = useState(null);
+
   const [selectedSemester, setSelectedSemester] = useState(null);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [semesterList, setSemesterList] = useState([]);
-  const [subjectsBySemester, setSubjectsBySemester] = useState({});  const previewTimeout = useRef(null);
+  const [subjectsBySemester, setSubjectsBySemester] = useState({});
+  const [materials, setMaterials] = useState([]);
+  const [pdfurls, setPdfurls] = useState({});
+  const [currentFile, setCurrentFile] = useState(null);
+
+  const previewTimeout = useRef(null);
 
   const handleBack = () => {
     if (selectedSubject) setSelectedSubject(null);
     else if (selectedSemester) setSelectedSemester(null);
+    setMaterials([]);
+    setPdfurls({});
+    setCurrentFile(null);
   };
+
   const studentDataJSON = localStorage.getItem("userData");
-  const {dept,specialization,year} = JSON.parse(studentDataJSON);
-  
+  const { dept, specialization, year } = JSON.parse(studentDataJSON);
+
   useEffect(() => {
     const SemesterData = async () => {
-      const semesterData = await getSemesterData(
-        {
-          dept,
-          specialization,
-          year
-        }
-      );
+      const semesterData = await getSemesterData({
+        dept,
+        specialization,
+        year,
+      });
       console.log(semesterData);
       setSemesterList(Object.keys(semesterData[0].data));
       setSubjectsBySemester(semesterData[0].data);
@@ -197,6 +67,30 @@ export default function Materials() {
 
     SemesterData();
   }, []);
+
+  const getMaterials = async (subject) => {
+    const materialsData = await getMaterialsData({ subject });
+    if (materialsData.message) return;
+    setMaterials(
+      materialsData.units.map((obj) => {
+        return obj.fileName;
+      })
+    );
+    setPdfurls(
+      materialsData.units.reduce((acc, f) => {
+        acc[f.fileName] = f.pdfUrl;
+        return acc;
+      }, {})
+    );
+  };
+
+  const viewFile = (fileURL, fileName) => {
+    const obj = {
+      fileName: fileName,
+      fileURL: fileURL,
+    };
+    setCurrentFile(obj);
+  };
 
   const view = selectedSubject
     ? "materials"
@@ -213,13 +107,13 @@ export default function Materials() {
       ? (subjectsBySemester[selectedSemester] || []).filter((s) =>
           s.toLowerCase().includes(searchTerm.toLowerCase())
         )
-      : (materialsData[selectedSubject] || []).filter((f) =>
+      : (materials || []).filter((f) =>
           f.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
   return (
     <div className={styles.fullScreen}>
-        <div className={styles.curvedBackground}></div>
+      <div className={styles.curvedBackground}></div>
 
       <h2 className={styles.heading}>
         {view === "semesterList" && "Materials"}
@@ -282,15 +176,13 @@ export default function Materials() {
                 key={subj}
                 className={styles.card}
                 onClick={() => {
+                  getMaterials(subj);
                   setSelectedSubject(subj);
                   setSearchTerm("");
                 }}
               >
                 <img
-                  src={
-                    subjectIcons[subj] ||
-                    "https://img.icons8.com/fluency/48/file.png"
-                  }
+                  src={"https://img.icons8.com/fluency/48/file.png"}
                   className={styles.folderIcon}
                   alt=""
                 />
@@ -300,7 +192,7 @@ export default function Materials() {
 
           {view === "materials" &&
             list.map((file, idx) => {
-              const isHovered = hoveredButton === idx;
+              // const isHovered = hoveredButton === idx;
 
               return (
                 <div key={idx} style={{ position: "relative" }}>
@@ -315,26 +207,31 @@ export default function Materials() {
                     <div className={styles.actions}>
                       <div
                         className={styles.previewWrapper}
-                        onMouseEnter={() => {
-                          clearTimeout(previewTimeout.current);
-                          setHoveredButton(idx);
-                          setPreviewFile(file);
-                        }}
-                        onMouseLeave={() => {
-                          previewTimeout.current = setTimeout(() => {
-                            setHoveredButton(null);
-                            setPreviewFile(null);
-                          }, 300);
-                        }}
+                        // onMouseEnter={() => {
+                        //   clearTimeout(previewTimeout.current);
+                        //   setHoveredButton(idx);
+                        //   setPreviewFile(file);
+                        // }}
+                        // onMouseLeave={() => {
+                        //   previewTimeout.current = setTimeout(() => {
+                        //     setHoveredButton(null);
+                        //     setPreviewFile(null);
+                        //   }, 300);
+                        // }}
                       >
-                        <button className={styles.btn}>Preview</button>
+                        <button
+                          className={styles.btn}
+                          onClick={() => viewFile(pdfurls[file], file)}
+                        >
+                          View
+                        </button>
                       </div>
 
                       <button className={styles.btn}>Download</button>
                     </div>
                   </div>
 
-                  {isHovered && (
+                  {/* {isHovered && (
                     <div
                       className={styles.previewTooltip}
                       onMouseEnter={() => clearTimeout(previewTimeout.current)}
@@ -354,12 +251,19 @@ export default function Materials() {
                         Preview of {file}
                       </span>
                     </div>
-                  )}
+                  )} */}
                 </div>
               );
             })}
         </motion.div>
       </AnimatePresence>
+      {currentFile && (
+        <FileViewer
+          fileURL={currentFile.fileURL}
+          fileName={currentFile.fileName}
+          closeFile={() => setCurrentFile(null)}
+        />
+      )}
     </div>
   );
 }

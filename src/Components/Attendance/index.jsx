@@ -1,14 +1,37 @@
 import { Fragment, useEffect, useState, useRef } from "react";
 import styles from "./index.module.css";
 import clsx from "clsx";
+import Loader from "../../Utils/Loader";
+import {
+  Chart,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  PieController,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title,
+} from "chart.js";
+
+// Register everything needed for bar and pie charts
+Chart.register(
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  PieController,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title
+);
 
 const startMonth = 5; // June
 const endMonth = 9; // October
 const startDate = 11;
 const endDate = 15;
-let gazettedHolidays;
-
-const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
 
 const url = process.env.REACT_APP_SERVER_URL;
 
@@ -22,7 +45,17 @@ const getHolidays = async () => {
   return new Set(holidays);
 };
 
-const generateDates = (totalDays) => {
+const getStudentAttendance = async (id) => {
+  return fetch(`${url}/api/users/get-attendance`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(id),
+  }).then((data) => data.json());
+};
+
+const generateDates = () => {
   const result = {};
   const year = new Date().getFullYear();
 
@@ -32,13 +65,11 @@ const generateDates = (totalDays) => {
     const days = [];
 
     while (date.getMonth() === month) {
-      if (date.getDay() !== 0 && date.getDay() !== 6) totalDays.days += 1;
       if (month === endMonth && dateNum > endDate) break;
       days.push(new Date(date));
       date.setDate(date.getDate() + 1);
       dateNum++;
     }
-
     result[month] = days;
   }
 
@@ -59,25 +90,75 @@ export default function Attendance() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const { id } = JSON.parse(localStorage.getItem("userData"));
       try {
-        gazettedHolidays = await getHolidays();
-        console.log(gazettedHolidays);
+        const holidays = await getHolidays();
+        setGazettedHolidays(holidays);
+        let data = await getStudentAttendance({ id });
+        const allDates = Object.values(datesByMonth).flat();
+        let currentDate = new Date();
+        setAttendanceData(data);
+        let currentPresentClasses = 0;
+        let currentTotalClasses = 0;
+
+        const workingDays = allDates.filter((date) => {
+          const day = date.getDay();
+          const dateStr = date.toLocaleDateString("en-CA");
+          const isWorkingDay = day !== 0 && day !== 6 && !holidays.has(dateStr);
+          if (date <= currentDate && isWorkingDay) currentWorkingDays += 1;
+          return isWorkingDay;
+        });
+
+        const currentWorkingDates = allDates.filter((date) => {
+          const day = date.getDay();
+          const dateStr = date.toLocaleDateString("en-CA");
+          const isWorkingDay =
+            day !== 0 &&
+            day !== 6 &&
+            date <= currentDate &&
+            !holidays.has(dateStr);
+          return isWorkingDay;
+        });
+
+        data.forEach((obj) => {
+          currentTotalClasses += obj.workingDays;
+          currentPresentClasses += obj.daysPresent;
+        });
+
+        const averageClassPerDay = Math.floor(
+          currentTotalClasses / currentWorkingDays
+        );
+        const currentPresentDays = Math.floor(
+          currentPresentClasses / averageClassPerDay
+        );
+
+        const presentDates = getRandomDates(
+          currentWorkingDates,
+          currentPresentDays
+        );
+        const presentSet = new Set(presentDates.map((d) => d.toDateString()));
+        const absentDates = currentWorkingDates.filter(
+          (d) => !presentSet.has(d.toDateString())
+        );
+
+        setAbsentDates(absentDates);
+        setPresentDates(presentDates);
+        setTotalDays(workingDays.length);
       } catch (error) {
-        console.error("Error Fetching Holidays Data");
+        console.error("Error Fetching Holidays Data", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  const totalDays = { days: 0 };
-  const datesByMonth = generateDates(totalDays);
-
-  const handleCheckboxChange = (dateStr) => {
-    setAttendance((prev) => ({
-      ...prev,
-      [dateStr]: !prev[dateStr],
-    }));
-  };
+  // const handleCheckboxChange = (dateStr) => {
+  //   setAttendance((prev) => ({
+  //     ...prev,
+  //     [dateStr]: !prev[dateStr],
+  //   }));
+  // };
 
   const totalPresent = Object.values(attendance).filter(Boolean).length;
   const holidays = totalDays.days - totalPresent;
@@ -132,6 +213,9 @@ export default function Attendance() {
     setShowResult(false);
   };
 
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <>
       <div className={styles.curvedBackground}></div>
@@ -244,26 +328,34 @@ export default function Attendance() {
                               );
 
                             const dateObj = new Date(dateStr);
-                            const isWeekend =
-                              dateObj.getDay() === 0 || dateObj.getDay() === 6;
+
+                            const isHoliday =
+                              dateObj.getDay() === 0 ||
+                              dateObj.getDay() === 6 ||
+                              gazettedHolidays.has(dateStr);
+
+                            const target = dateObj.toDateString();
+                            const isPresent = presentDates.some(
+                              (date) => date.toDateString() === target
+                            );
 
                             return (
                               <input
                                 key={rowIdx}
                                 type="checkbox"
                                 className={clsx(styles.dayCheckbox, {
-                                  [styles.weekendCheckbox]: isWeekend,
+                                  [styles.weekendCheckbox]: isHoliday,
+                                  [styles.absentCheckbox]:
+                                    !isPresent &&
+                                    dateObj <= new Date() &&
+                                    !isHoliday,
                                 })}
-                                checked={
-                                  isWeekend
-                                    ? true
-                                    : attendance[dateStr] || false
-                                }
-                                onChange={() => {
-                                  if (!isWeekend) handleCheckboxChange(dateStr);
-                                }}
-                                disabled={isWeekend}
-                                readOnly={isWeekend}
+                                checked={isPresent}
+                                // onChange={() => {
+                                //   if (!isHoliday) handleCheckboxChange(dateStr);
+                                // }}
+                                disabled={true}
+                                readOnly={true}
                                 data-tooltip={new Date(dateStr).toDateString()}
                               />
                             );
@@ -275,6 +367,23 @@ export default function Attendance() {
                 );
               })}
             </div>
+            <div className={styles.calculateWrapper}>
+              <span>{calculateClassesRequired()}</span>
+              <button className={styles.futureButton}>
+                <span className={styles.text}>See The Future</span>
+                <span aria-hidden="" className={styles.marquee}>
+                  Future
+                </span>
+              </button>
+            </div>
+          </div>
+          <div className={styles.barChartBox}>
+            <span>Subject Wise Attendance</span>
+            <BarChart data={attendanceData} />
+          </div>
+          <div className={styles.pieChartBox}>
+            <span>Pie Chart</span>
+            <PieChart data={attendanceData} />
           </div>
         </div>
       </div>
