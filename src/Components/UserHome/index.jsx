@@ -7,11 +7,11 @@ import Attendance from '../Attendance';
 import Chats from "../Chats";
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 
-export default function UserHome() {
+export default function UserHome(props) {
   return (
     <>
       <Routes>
-        <Route path="/" element={<><NavBar /><ChatBot /><Outlet /></>}>
+        <Route path="/" element={<><NavBar logOutUser={props.logOutUser}/><ChatBot /><Outlet /></>}>
           <Route path="profile" element={<Profile />} />
           <Route path="material" element={<Material />} />
           <Route path="chatgpt" element={<ChatGPT />} />

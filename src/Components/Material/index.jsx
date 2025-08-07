@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState,useRef } from "react";
 import styles from "./index.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search as SearchIcon } from "lucide-react";
@@ -26,6 +26,7 @@ const getMaterialsData = async (subject) => {
     body: JSON.stringify(subject),
   }).then((data) => data.json());
 };
+
 
 export default function Materials() {
   // const [previewFile, setPreviewFile] = useState(null);
@@ -114,7 +115,6 @@ export default function Materials() {
   return (
     <div className={styles.fullScreen}>
       <div className={styles.curvedBackground}></div>
-
       <h2 className={styles.heading}>
         {view === "semesterList" && "Materials"}
         {view === "subjects" && selectedSemester}
@@ -149,7 +149,6 @@ export default function Materials() {
             <p className={styles.noResults}>No items found</p>
           )}
 
-          {/* SEMESTERS */}
           {view === "semesterList" &&
             list.map((sem) => (
               <div

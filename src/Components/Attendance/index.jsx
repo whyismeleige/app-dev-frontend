@@ -1,4 +1,5 @@
-import { Fragment, useEffect, useState, useRef } from "react";
+// === Attendance.jsx ===
+import { useEffect, useState, useRef } from "react";
 import styles from "./index.module.css";
 import clsx from "clsx";
 import Loader from "../../Utils/Loader";
@@ -76,17 +77,132 @@ const generateDates = () => {
   return result;
 };
 
-const weeksBetween = (start_date, end_date) => {
-  const oneWeek = 1000 * 60 * 60 * 24 * 7;
-  const delta = end_date - start_date;
-  return Math.floor(delta / oneWeek);
+const getRandomDates = (dates, count) => {
+  const shuffled = [...dates].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+};
+
+const BarChart = (props) => {
+  const chartRef = useRef(null);
+  const chartInstanceRef = useRef(null);
+  const data = props.data;
+  const subjects = data.map((item) => item.subject);
+  const percentages = data.map((item) => item.percentage);
+
+  useEffect(() => {
+    const ctx = chartRef.current.getContext("2d");
+
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+    }
+
+    chartInstanceRef.current = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: subjects,
+        datasets: [
+          {
+            label: "Percentage",
+            data: percentages,
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+            borderColor: "rgba(75, 192, 192, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+
+    return () => {
+      chartInstanceRef.current?.destroy();
+    };
+  }, []);
+
+  return (
+    <div className={styles.barChart}>
+      <canvas ref={chartRef} />
+    </div>
+  );
+};
+
+// PIE CHART
+const PieChart = (props) => {
+  const pieRef = useRef(null);
+  const pieInstanceRef = useRef(null);
+  const data = props.data;
+  let presentWorkingDays = 0,
+    absentWorkingDays = 0;
+  data.forEach((item) => {
+    presentWorkingDays += item.daysPresent;
+    absentWorkingDays += item.daysAbsent;
+  });
+  const total = presentWorkingDays + absentWorkingDays;
+  const presentPercent = Math.floor((presentWorkingDays / total) * 100);
+  const absentPercent = Math.floor((absentWorkingDays / total) * 100);
+  useEffect(() => {
+    const ctx = pieRef.current.getContext("2d");
+
+    if (pieInstanceRef.current) {
+      pieInstanceRef.current.destroy();
+    }
+
+    pieInstanceRef.current = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Present", "Absent"],
+        datasets: [
+          {
+            label: "Attendance",
+            data: [presentPercent, absentPercent],
+            backgroundColor: [
+              "rgba(54, 162, 235, 0.6)",
+              "rgba(255, 99, 132, 0.6)",
+              "rgba(255, 206, 86, 0.6)",
+            ],
+            borderColor: [
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 99, 132, 1)",
+              "rgba(255, 206, 86, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+      },
+    });
+
+    return () => {
+      pieInstanceRef.current?.destroy();
+    };
+  }, []);
+
+  return (
+    <div className={styles.pieChart}>
+      <canvas ref={pieRef} />
+    </div>
+  );
 };
 
 export default function Attendance() {
-  const [attendance, setAttendance] = useState({});
-  const [showResult, setShowResult] = useState(false);
-  const [resultData, setResultData] = useState(null);
-  const resultRef = useRef(null);
+  // const [attendance, setAttendance] = useState({});
+  const [attendanceMessage, setAttendanceMessage] = useState(null);
+  const [gazettedHolidays, setGazettedHolidays] = useState(null);
+  const [totalDays, setTotalDays] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [presentDates, setPresentDates] = useState([]);
+  const [absentDates, setAbsentDates] = useState([]);
+  const [attendanceData, setAttendanceData] = useState(null);
+  const datesByMonth = generateDates();
+  let currentWorkingDays = 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -160,58 +276,15 @@ export default function Attendance() {
   //   }));
   // };
 
-  const totalPresent = Object.values(attendance).filter(Boolean).length;
-  const holidays = totalDays.days - totalPresent;
-
-  const calculateClassesRequired = (e) => {
-    e.preventDefault();
-    let total = 0;
-    const formData = new FormData(e.target);
-    const daysData = days.map((day) => {
-      const value = parseInt(formData.get(day));
-      total += value;
-      return value;
-    });
-
-    const avg = total / 5;
-    const joining_date = new Date(formData.get("joining_date"));
-    const end_date = new Date(formData.get("end_date"));
-    const current_date = new Date();
-
-    const weeks_done = weeksBetween(joining_date, current_date);
-    const weeks_left = weeksBetween(current_date, end_date);
-    const today_total_classes = weeks_done * total;
-
-    const current_attendance = parseInt(formData.get("current_attendance"));
-    const cutoff_required = parseInt(formData.get("cutoff_required"));
-    const current_classes_attended =
-      (current_attendance / 100) * today_total_classes;
-
-    const classes_left = weeks_left * total;
-    const total_classes = today_total_classes + classes_left;
-    const classes_cutoff = (cutoff_required / 100) * total_classes;
-    const added_classes = current_classes_attended + classes_left;
-    const max_attendance = (added_classes / total_classes) * 100;
-
-    const canSkip = Math.floor(added_classes - classes_cutoff);
-    const message = canSkip >= 0
-      ? `(resulttt will be displayed here )You can skip ${canSkip} more ${canSkip === 1 ? "class" : "classes"} and still meet the cutoff.`
-      : `You need to attend all upcoming classes to meet the required cutoff.`;
-
-    setResultData({
-      message,
-    });
-
-    setShowResult(true);
-
-    setTimeout(() => {
-      resultRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+  const calculateClassesRequired = () => {
+    const futureHolidays = Math.floor(0.25 * totalDays) - absentDates.length;
+    if (futureHolidays <= 0) return "Go to All Classes";
+    else return `You can take ${futureHolidays} holidays in the Future.`;
   };
 
-  const handleGoBack = () => {
-    setShowResult(false);
-  };
+  const totalPresent = presentDates.length;
+  const holidays =
+    presentDates.length + absentDates.length - presentDates.length;
 
   if (loading) {
     return <Loader />;
@@ -231,65 +304,6 @@ export default function Attendance() {
           <div className={styles.gpaCardStatBox}>
             <h3>Holidays Taken</h3>
             <p className={styles.statValue}>{holidays}</p>
-          </div>
-
-          <div className={styles.calculatorCard}>
-            <h3>Attendance Calculator</h3>
-            <div className={styles.calculatorContent}>
-              <form onSubmit={calculateClassesRequired}>
-                {days.map((day) => (
-                  <Fragment key={day}>
-                    <label htmlFor={day}>{`Enter the Classes of ${day}`}</label>
-                    <input type="number" name={day} required />
-                    <br />
-                  </Fragment>
-                ))}
-                <label htmlFor="joining_date">
-                  Enter your Joining Date (MM-DD-YYYY):
-                </label>
-                <input type="date" id="joining_date" name="joining_date" />
-                <br />
-                <label htmlFor="end_date">
-                  Enter your end date of semester (MM-DD-YYYY):
-                </label>
-                <input type="date" id="end_date" name="end_date" />
-                <br />
-                <label htmlFor="current_attendance">
-                  What is your current attendance (in %)?
-                </label>
-                <input
-                  type="number"
-                  id="current_attendance"
-                  name="current_attendance"
-                />
-                <br />
-                <label htmlFor="cutoff_required">
-                  What percentage is required to write the exam?
-                </label>
-                <input
-                  type="number"
-                  id="cutoff_required"
-                  name="cutoff_required"
-                />
-                <br />
-                {!showResult && (
-                  <div className={styles.buttonWrapper}>
-                    <button type="submit" className={styles.submitBtn}>
-                      Submit
-                    </button>
-                  </div>
-                )}
-              </form>
-
-              {showResult && resultData && (
-                <div ref={resultRef} className={styles.resultCard}>
-                  <p className={styles.resultMessage}>{resultData.message}</p>
-                  <button className={styles.goBackBtn} onClick={handleGoBack}>
-                    Go Back
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
 
           <div className={styles.profileCard}>
