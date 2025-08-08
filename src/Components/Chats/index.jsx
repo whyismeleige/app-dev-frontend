@@ -10,31 +10,44 @@ import {
 } from "react-icons/fa";
 
 const channels = {
-  BBA: ["BBA - IT", "BBA - Gen", "BBA - Entrepreneur", "BBA - FM", "BBA - BA"],
-  "B.Com": ["B.Com - Gen", "B.Com - Computers"],
-  "B.Sc": ["B.Sc - CS", "B.Sc - Maths", "B.Sc - Stats"],
+  General: ["News", "Chat"],
+  BBA: ["BBA - It", "BBA - Ge", "BBA - En", "BBA - FM", "BBA - BA"],
+  "B.Com": ["B.Com - Ge", "B.Com - Com", "B.Com - IT", "B.Com - IF", "B.Com - Pr", "B.Com - Ho"],
+  "B.Sc": ["B.Sc - Ph", "B.Sc - St", "B.Sc - El", "B.Sc - Ds"],
   Alumni: ["Connect with Alumni"],
 };
 
 const initialMessages = {
-  "BBA - IT": [
-    { user: "👤", text: "Hey, this is live chats!" },
-    { user: "👥", text: "Welcome to BBA - IT!" },
+  "News": [
+    { user: "📰", text: "Stay tuned for updates!" }
   ],
-  "BBA - Gen": [],
-  "BBA - Entrepreneur": [],
+  "Chat": [
+    { user: "👤", text: "Hey, this is General Chats!" },
+    { user: "👥", text: "Refrain from using inappropriate language" },
+  ],
+  "BBA - It": [],
+  "BBA - Ge": [],
+  "BBA - En": [],
   "BBA - FM": [],
   "BBA - BA": [],
-  "B.Com - Gen": [],
-  "B.Com - Computers": [],
-  "B.Sc - CS": [],
-  "B.Sc - Maths": [],
-  "B.Sc - Stats": [],
-  "Connect with Alumni": [{ user: "🎓", text: "Alumni chat opened!" }],
+  "B.Com - Ge": [],
+  "B.Com - Com": [],
+  "B.Com - IT": [],
+  "B.Com - IF": [],
+  "B.Com - Pr": [],
+  "B.Com - Ho": [],
+  "B.Sc - Ph": [],
+  "B.Sc - St": [],
+  "B.Sc - El": [],
+  "B.Sc - Ds": [],
+  "Connect with Alumni": [
+    { user: "🎓", text: "Alumni chat opened!" }
+  ],
 };
 
 export default function LiveChats() {
-  const [selectedChannel, setSelectedChannel] = useState("BBA - IT");
+  const [selectedServer, setSelectedServer] = useState("General");
+  const [selectedChannel, setSelectedChannel] = useState("Chat");
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState(initialMessages);
   const chatEndRef = useRef(null);
@@ -47,7 +60,7 @@ export default function LiveChats() {
     if (input.trim()) {
       setMessages((prev) => ({
         ...prev,
-        [selectedChannel]: [...prev[selectedChannel], { user: "🧑", text: input }],
+        [selectedChannel]: [...(prev[selectedChannel] || []), { user: "🧑", text: input }],
       }));
       setInput("");
     }
@@ -55,7 +68,7 @@ export default function LiveChats() {
 
   return (
     <div className={styles.discordContainer}>
-      {/* Sidebar */}
+      {/* Sidebar (Server List) */}
       <motion.div
         className={styles.sidebar}
         initial={{ x: -100 }}
@@ -64,8 +77,18 @@ export default function LiveChats() {
       >
         <div className={styles.logo}>💠</div>
         <div className={styles.serverList}>
-          {Object.keys(channels).map((cat, i) => (
-            <button key={i} className={styles.serverBtn} title={cat}>
+          {Object.keys(channels).map((cat) => (
+            <button
+              key={cat}
+              className={`${styles.serverBtn} ${
+                selectedServer === cat ? styles.serverBtnActive : ""
+              }`}
+              title={cat}
+              onClick={() => {
+                setSelectedServer(cat);
+                setSelectedChannel(channels[cat][0]); // Auto-select first channel
+              }}
+            >
               {cat[0]}
             </button>
           ))}
@@ -79,23 +102,19 @@ export default function LiveChats() {
         animate={{ x: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
       >
-        {Object.entries(channels).map(([category, subs]) => (
-          <div key={category}>
-            <h3>{category}</h3>
-            <ul>
-              {subs.map((sub) => (
-                <li
-                  key={sub}
-                  className={selectedChannel === sub ? styles.channelActive : ""}
-                  onClick={() => setSelectedChannel(sub)}
-                >
-                  <FaHashtag className={styles.icon} />
-                  {sub}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        <h3>{selectedServer}</h3>
+        <ul>
+          {channels[selectedServer].map((sub) => (
+            <li
+              key={sub}
+              className={selectedChannel === sub ? styles.channelActive : ""}
+              onClick={() => setSelectedChannel(sub)}
+            >
+              <FaHashtag className={styles.icon} />
+              {sub}
+            </li>
+          ))}
+        </ul>
       </motion.div>
 
       {/* Chat Area */}
