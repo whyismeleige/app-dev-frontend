@@ -29,14 +29,24 @@ const verifyOtp = async (credentials) => {
 };
 
 const getUserData = async (hallTicketNo) => {
-  return fetch(`${SERVER_URL}/api/get-user-data`,{
-    method: 'POST',
+  return fetch(`${SERVER_URL}/api/get-user-data`, {
+    method: "POST",
     headers: {
-      'content-type': 'application/json'
+      "content-type": "application/json",
     },
-    body: JSON.stringify(hallTicketNo)
+    body: JSON.stringify(hallTicketNo),
   }).then((data) => data.json());
-}
+};
+
+const getUserId = async (email) => {
+  return fetch(`${SERVER_URL}/api/server/get-user`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(email),
+  }).then((data) => data.json());
+};
 
 export const LoginForm = (props) => {
   const [hallTicketNo, setHallTicketNo] = useState("");
@@ -58,9 +68,11 @@ export const LoginForm = (props) => {
     setLoading(false);
     if (response.error) return;
     if (response.token) {
-      const studentData = await getUserData({hallTicketNo});
+      const studentData = await getUserData({ hallTicketNo });
+      const userId = await getUserId({email});
       props.setUserData(studentData);
       props.setClientToken(response.token);
+      props.setUserId(userId);
       return;
     }
     setFormStep((prevStep) => prevStep + 1);

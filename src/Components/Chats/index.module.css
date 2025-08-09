@@ -14,7 +14,7 @@
   height: 100vh;
   background: linear-gradient(to right, #000010, #000022);
   color: var(--white);
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   overflow: hidden;
   width: 100%;
 }
@@ -38,7 +38,8 @@
 }
 
 /* For Chrome/Edge */
-.channelList::-webkit-scrollbar {
+.channelList::-webkit-scrollbar,
+.membersList::-webkit-scrollbar {
   width: 8px;
 }
 .channelList::-webkit-scrollbar-track {
@@ -75,19 +76,35 @@
   transition: 0.2s;
 }
 
+.selectedServerBtn {
+  border: 2px solid white;
+}
+
 .serverBtn:hover {
   background: var(--blue-accent);
 }
 
 /* Channels */
-.channelList {
+.channelList,
+.membersList {
   width: 200px;
   background: var(--glass);
   border-right: 1px solid var(--border);
   backdrop-filter: blur(12px);
-  padding: 20px;
+  padding: 100px 20px;
   animation: slideInLeft 0.5s ease-out;
   overflow-y: auto;
+}
+
+.membersList h3 {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.membersList ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .channelList h3 {
@@ -100,6 +117,18 @@
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.membersList li {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  color: var(--white);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
 }
 
 .channelList li {
@@ -162,14 +191,22 @@
 
 .message {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 16px;
   gap: 12px;
 }
 
+.userMessage {
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+}
+
 .avatar {
-  font-size: 1.8rem;
-  color: var(--blue-accent);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: block;
 }
 
 .message p {

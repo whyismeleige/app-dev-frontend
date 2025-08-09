@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 export default function NavBar(props) {
@@ -29,6 +29,8 @@ export default function NavBar(props) {
       setIsDropdownVisible(false);
     }, 1000);
   };
+
+  const { avatar } = JSON.parse(localStorage.getItem("userServerData"));
 
   return (
     <>
@@ -81,7 +83,7 @@ export default function NavBar(props) {
                 <div className={styles.profileIcon}>
                   <img
                     className={styles.profileImg}
-                    src="https://i.pravatar.cc/40"
+                    src={avatar}
                     alt="user"
                   />
                 </div>

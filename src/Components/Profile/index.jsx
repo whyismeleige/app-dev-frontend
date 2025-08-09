@@ -1,10 +1,11 @@
 import styles from "./index.module.css";
 
 export default function Profile() {
-
-  const userDataJSON = localStorage.getItem('userData');
+  const userDataJSON = localStorage.getItem("userData");
   const user = JSON.parse(userDataJSON);
   console.log(user);
+
+  const { avatar } = JSON.parse(localStorage.getItem("userServerData"));
 
   return (
     <>
@@ -15,11 +16,7 @@ export default function Profile() {
         <div className={styles.profileLayout}>
           <div className={styles.profileCard}>
             <div className={styles.profilePicWrapper}>
-              <img
-                className={styles.profilePic}
-                src={"https://i.pravatar.cc/40"}
-                alt="Profile"
-              />
+              <img className={styles.profilePic} src={avatar} alt="Profile" />
             </div>
 
             <div className={styles.profileInfo}>
