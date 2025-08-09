@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/app-dev-frontend/static/css/main.993787a9.css",
+    "main.js": "/app-dev-frontend/static/js/main.bbe401d2.js",
+    "index.html": "/app-dev-frontend/index.html",
+    "main.993787a9.css.map": "/app-dev-frontend/static/css/main.993787a9.css.map",
+    "main.bbe401d2.js.map": "/app-dev-frontend/static/js/main.bbe401d2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.993787a9.css",
+    "static/js/main.bbe401d2.js"
+  ]
+}
