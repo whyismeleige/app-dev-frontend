@@ -253,6 +253,116 @@
   font-size: 1.2rem;
 }
 
+.dmBtn {
+  background: var(--hover-bg);
+  color: var(--blue-accent);
+  font-size: 1.3rem;
+}
+
+.dmBtn:hover {
+  background: var(--blue-accent);
+  color: var(--white);
+}
+
+
+/* Header icons container (for members toggle button & others) */
+.headerIcons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Members Toggle Button - Positioned Below Navbar */
+.memberToggleBtn {
+  position: absolute;
+  top: 60px; /* Adjust this to your navbar height */
+  right: 16px;
+  z-index: 50; /* Ensure it's above chat area but below sticky overlays */
+  background: var(--hover-bg);
+  border: none;
+  color: var(--white);
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.memberToggleBtn:hover {
+  background: var(--blue-accent);
+  transform: scale(1.05);
+}
+
+
+.messageMenu {
+  position: relative;
+  margin-left: auto;
+}
+
+.menuButton {
+  background: var(--hover-bg);
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.15s ease;
+  font-size: 1.1rem; /* slightly bigger for tap targets */
+}
+
+.menuDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  z-index: 50;
+  min-width: 120px;
+}
+
+.menuDropdown button {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menuButton:hover {
+  background: var(--blue-accent);
+  transform: scale(1.05);
+}
+
+.menuButton:active {
+  transform: scale(0.95);
+}
+
+/* Members list overlay mode for mobile */
+@media (max-width: 768px) {
+  .membersList {
+    position: absolute;
+    top: 60px; /* below the header */
+    right: 0;
+    height: calc(100% - 60px);
+    border-left: 1px solid var(--border);
+    z-index: 100;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    padding: 20px;
+    width: 200px;
+    animation: slideInRight 0.3s ease-out;
+  }
+}
+
+
 /* Animations */
 @keyframes slideInLeft {
   from {
