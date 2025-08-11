@@ -111,9 +111,11 @@ export default function LiveChats() {
       }, 3000);
     });
 
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView();
+    }
     return () => socket.off("userTyping");
-  }, []);
+  }, [messages]);
 
   const sendMessage = () => {
     socket.emit("sendMessage", {
@@ -123,7 +125,7 @@ export default function LiveChats() {
       content: input,
     });
   };
-  console.log(typingUsersByChannel);
+
   const getTypingText = () => {
     const typingUsers = typingUsersByChannel[selectedChannel] || [];
     switch (typingUsers.length) {
@@ -180,6 +182,10 @@ export default function LiveChats() {
         animate={{ x: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
       >
+        <div className={styles.channelHeader}>
+          <span># {selectedServer.name} </span>
+          <FaFolderPlus className={styles.icon} />
+        </div>
         {channels.map((channel, idx) => (
           <div key={idx}>
             <ul>
@@ -266,7 +272,7 @@ export default function LiveChats() {
             <div key={idx}>
               <ul>
                 <li className={styles.memberDiv}>
-                  <FaRegUser />
+                  <img className={styles.avatar} src={member.avatar} />
                   {member.displayName}
                 </li>
               </ul>

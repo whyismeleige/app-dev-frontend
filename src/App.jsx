@@ -1,6 +1,6 @@
 import Login from "./Components/Login";
 import ForgetPass from "./Components/ForgetPass";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import { useState } from "react";
 import UserHome from "./Components/UserHome";
 
@@ -28,7 +28,7 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route
           path="*"
@@ -46,6 +46,6 @@ export default function App() {
         />
         <Route path="/forget-password" element={<ForgetPass />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
