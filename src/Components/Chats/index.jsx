@@ -8,13 +8,22 @@ import {
   FaPaperPlane,
   FaFolderPlus,
   FaPaperclip,
-  FaRegUser,
 } from "react-icons/fa";
 import clsx from "clsx";
 
 const SOCKET_URL = process.env.REACT_APP_SOCKET_URL;
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const socket = io(SOCKET_URL);
+
+const getDetails = async (userId) => {
+  return fetch(`${SERVER_URL}/api/server/get-user-details`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(userId),
+  }).then((data) => data.json());
+};
 
 const timeFormat = (timeStamp) => {
   const date = new Date(timeStamp);
@@ -78,6 +87,10 @@ export default function LiveChats() {
   const { _id, avatar } = JSON.parse(localStorage.getItem("userServerData"));
 
   useEffect(() => {
+    chatEndRef.current.scrollIntoView();
+  }, [messages]);
+
+  useEffect(() => {
     const getUserData = async () => {
       const serversData = await getServerData({ userId: _id });
       console.log(serversData);
@@ -110,12 +123,8 @@ export default function LiveChats() {
         }));
       }, 3000);
     });
-
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView();
-    }
     return () => socket.off("userTyping");
-  }, [messages]);
+  }, []);
 
   const sendMessage = () => {
     socket.emit("sendMessage", {
@@ -124,6 +133,7 @@ export default function LiveChats() {
       avatar,
       content: input,
     });
+    setInput("");
   };
 
   const getTypingText = () => {
@@ -154,23 +164,16 @@ export default function LiveChats() {
         <div className={styles.logo}>💠</div>
         <div className={styles.serverList}>
           {servers.map((server, idx) => (
-            <button
-              onClick={() => {
+            <ServerBtn
+              selectServer={() => {
                 setSelectedServer({ id: server._id, name: server.name });
                 setChannels(server.channels);
                 setMembers(server.members);
               }}
+              server={server}
+              selectedServer={selectedServer}
               key={idx}
-              className={clsx(
-                styles.serverBtn,
-                server.id === selectedServer.id
-                  ? styles.selectedServerBtn
-                  : null
-              )}
-              title={server.name}
-            >
-              {server.name[0]}
-            </button>
+            />
           ))}
         </div>
       </motion.div>
@@ -267,19 +270,80 @@ export default function LiveChats() {
         animate={{ x: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
+        <div className={styles.membersHeader}>
+          <span># Members</span>
+          <FaFolderPlus className={styles.icon} />
+        </div>
         {members.map((member, idx) => {
-          return (
-            <div key={idx}>
-              <ul>
-                <li className={styles.memberDiv}>
-                  <img className={styles.avatar} src={member.avatar} />
-                  {member.displayName}
-                </li>
-              </ul>
-            </div>
-          );
+          return <MemberWidget member={member} key={idx} />;
         })}
       </motion.div>
     </div>
   );
 }
+
+const ServerBtn = ({ selectServer, server, selectedServer }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div className={styles.serverBtnContainer}>
+      <button
+        onClick={selectServer}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={clsx(
+          styles.serverBtn,
+          server.id === selectedServer.id ? styles.selectedServerBtn : null
+        )}
+      >
+        {server.name[0]}
+      </button>
+      {isHovered && <div className={styles.serverTooltip}>{server.name}</div>}
+    </div>
+  );
+};
+
+const MemberWidget = ({ member }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [loading, isLoading] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  const getData = async () => {
+    const userId = member.userId;
+    const data = await getDetails({ userId });
+    setIsHovered(true);
+    setUserData(data);
+  };
+
+  return (
+    <div>
+      <ul>
+        <li
+          className={styles.memberDiv}
+          onMouseEnter={getData}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {isHovered && (
+            <div className={styles.memberWidgetContainer}>
+              <div className={styles.memberBasicDetails}>
+                <img className={styles.memberAvatar} src={member.avatar} />
+                <div>
+                  <span className={styles.userName}>{userData.nickname}</span>
+                  <span className={styles.userStatus}>{userData.status}</span>
+                </div>
+              </div>
+              <span className={styles.memberId}>
+                ID: {userData.email.substr(0, 11)}
+              </span>
+              <span className={styles.lastSeen}>
+                Last Seen: {timeFormat(userData.lastSeen)}
+              </span>
+            </div>
+          )}
+          <img className={styles.avatar} src={member.avatar} />
+          {member.displayName}
+        </li>
+      </ul>
+    </div>
+  );
+};
