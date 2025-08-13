@@ -1,6 +1,6 @@
 import Login from "./Components/Login";
 import ForgetPass from "./Components/ForgetPass";
-import { Routes, Route, BrowserRouter, HashRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import { useState } from "react";
 import UserHome from "./Components/UserHome";
 
