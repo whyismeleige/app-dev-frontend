@@ -232,6 +232,12 @@
   visibility: visible;
   transform: translateY(-50%) translateX(0);
 }
+/* Position tooltip above if needed */
+.aboveTooltip {
+  bottom: 100%; /* show above */
+  top: auto;
+}
+
 
 /* Animations */
 @keyframes slideIn {
@@ -487,6 +493,7 @@
   transform: translateY(-10px) scale(0.95);
   animation: fadeInGlass 0.3s ease forwards;
 }
+
 
 @keyframes fadeInGlass {
   to {

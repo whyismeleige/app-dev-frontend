@@ -1,11 +1,13 @@
 import styles from "./index.module.css";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 export default function NavBar(props) {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(true);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   let dropdownTimeout;
 
   useEffect(() => {
@@ -35,17 +37,30 @@ export default function NavBar(props) {
   return (
     <>
       <nav className={styles.topNav}>
+        {/* Logo */}
         <div className={styles.navLogo}>MyApp</div>
 
         <div className={styles.navInner}>
-          <ul className={styles.navLinks}>
+          {/* Hamburger */}
+          <div
+            className={styles.mobileMenuIcon}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </div>
+
+          {/* Links */}
+          <ul
+            className={`${styles.navLinks} ${
+              isMobileMenuOpen ? styles.mobileOpen : ""
+            }`}
+          >
             <li>
               <Link to="/home">Home</Link>
             </li>
             <li>
               <Link to="/material">Materials</Link>
             </li>
-
             <li>
               <Link to="/attendance">Attendance</Link>
             </li>
@@ -55,9 +70,20 @@ export default function NavBar(props) {
             <li>
               <Link to="/chatgpt">ChatGPT</Link>
             </li>
+
+            {/* Mobile Logout inside hamburger */}
+            {isMobileMenuOpen && (
+              <button
+                className={styles.logoutButtonMobile}
+                onClick={props.logOutUser}
+              >
+                Logout
+              </button>
+            )}
           </ul>
 
           <div className={styles.navRight}>
+            {/* Notifications */}
             <div className={styles.notificationContainer}>
               <div
                 className={styles.notificationIcon}
@@ -78,19 +104,16 @@ export default function NavBar(props) {
               </div>
             </div>
 
+            {/* Profile */}
             <div className={styles.navbar}>
               <Link to="/profile">
                 <div className={styles.profileIcon}>
-                  <img
-                    className={styles.profileImg}
-                    src={avatar}
-                    alt="user"
-                  />
+                  <img className={styles.profileImg} src={avatar} alt="user" />
                 </div>
               </Link>
             </div>
 
-            {/*Logout button */}
+            {/* Desktop Logout */}
             <button className={styles.logoutButton} onClick={props.logOutUser}>
               Logout
             </button>

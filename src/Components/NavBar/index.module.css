@@ -264,3 +264,97 @@
   box-shadow: 0 0 15px rgba(67, 24, 255, 0.7), 0 0 5px rgba(255, 255, 255, 0.3);
   transform: translateY(-2px) scale(1.02);
 }
+/* Hamburger icon for mobile */
+.mobileMenuIcon {
+  display: none;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.mobileMenuIcon:hover {
+  transform: scale(1.1);
+}
+
+/* Mobile nav open state */
+@media (max-width: 768px) {
+  .mobileMenuIcon {
+    display: block;
+  }
+
+  .navLinks {
+    position: fixed;
+    top: 60px;
+    right: -100%;
+    width: 250px;
+    height: calc(100vh - 60px);
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px 20px;
+    transition: right 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    z-index: 1002;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    box-shadow: -4px 0 12px rgba(0,0,0,0.6);
+  }
+
+  .navLinks.mobileOpen {
+    right: 0;
+    opacity: 1;
+  }
+
+  .navLinks li {
+    width: 100%;
+  }
+
+  .navLinks li a {
+    font-size: 16px;
+    display: block;
+    padding: 12px 0;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    border-radius: 8px;
+    text-align: left;
+  }
+
+  .navLinks li a:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Hide desktop logout */
+  .logoutButton {
+    display: none;
+  }
+
+  /* Mobile logout inside hamburger */
+  .logoutButtonMobile {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    background: linear-gradient(135deg, black, #2d2d5f);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+  }
+
+  .logoutButtonMobile:hover {
+    background: linear-gradient(to right, black, #4318FF);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* Right side items (notifications, profile) stay visible */
+  .navRight {
+    gap: 12px;
+  }
+}

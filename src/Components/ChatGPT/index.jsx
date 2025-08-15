@@ -8,6 +8,11 @@ import {
   faChevronLeft,
   faChevronRight,
   faEllipsisVertical,
+  faPlus,
+  faPencil,
+  faTrash,
+  faShare,
+  faSearch,
   faLocationArrow,
 } from "@fortawesome/free-solid-svg-icons";
 import clsx from "clsx";
@@ -22,26 +27,27 @@ const ChatGPTLikeComponent = () => {
   const [renamingIndex, setRenamingIndex] = useState(null);
   const [typing, setTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+
   const recognitionRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   const handleSend = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage = { text: input, from: "user" };
+    const userMessage = { text: input.trim(), from: "user" };
     const newChatIfNeeded = currentChatIndex === null;
-
     let updatedChats = [...chatList];
 
     if (newChatIfNeeded) {
       const newChat = {
-        name: input.slice(0, 30),
+        name: input.slice(0, 30) + (input.length > 30 ? "..." : ""),
         messages: [userMessage],
       };
       updatedChats.push(newChat);
       setCurrentChatIndex(updatedChats.length - 1);
-    } else if (updatedChats[currentChatIndex]) {
+    } else {
       updatedChats[currentChatIndex].messages.push(userMessage);
     }
 
@@ -50,7 +56,19 @@ const ChatGPTLikeComponent = () => {
     setTyping(true);
 
     setTimeout(() => {
-      const botResponse = { text: "AI response goes here.", from: "bot" };
+      const responses = [
+        "I'd be happy to help you with that. Can you provide more details?",
+        "That's an interesting question. Let me think about this...",
+        "I understand what you're asking. Here's my perspective:",
+        "Great question! This is something I can definitely help with.",
+        "Thanks for asking. Let me break this down for you:",
+      ];
+
+      const botResponse = {
+        text: responses[Math.floor(Math.random() * responses.length)],
+        from: "bot",
+      };
+
       const updated = [...updatedChats];
       const index = newChatIfNeeded
         ? updatedChats.length - 1
@@ -61,7 +79,7 @@ const ChatGPTLikeComponent = () => {
         setChatList(updated);
       }
       setTyping(false);
-    }, 1000);
+    }, Math.random() * 1500 + 800);
   };
 
   const toggleSidebar = () => {
@@ -79,15 +97,32 @@ const ChatGPTLikeComponent = () => {
   const handleSearch = (e) => setSearchQuery(e.target.value.toLowerCase());
 
   const handleRename = (i, newName) => {
-    const updated = [...chatList];
-    updated[i].name = newName;
-    setChatList(updated);
+    if (newName.trim()) {
+      const updated = [...chatList];
+      updated[i].name = newName.trim();
+      setChatList(updated);
+    }
+    setRenamingIndex(null);
   };
 
   const handleDelete = (i) => {
     const updated = chatList.filter((_, idx) => idx !== i);
     setChatList(updated);
-    if (currentChatIndex === i) setCurrentChatIndex(null);
+    if (currentChatIndex === i) {
+      setCurrentChatIndex(updated.length ? 0 : null);
+    } else if (currentChatIndex > i) {
+      setCurrentChatIndex(currentChatIndex - 1);
+    }
+  };
+
+  const handleNewChat = () => {
+    setCurrentChatIndex(null);
+    setInput("");
+  };
+
+  const handleChatSelect = (index) => {
+    setCurrentChatIndex(index);
+    setRenamingIndex(null);
   };
 
   const filteredChats = chatList.filter((chat) =>
@@ -97,6 +132,10 @@ const ChatGPTLikeComponent = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatList, typing]);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [currentChatIndex]);
 
   const handleMicClick = () => {
     if (!("webkitSpeechRecognition" in window)) {
@@ -113,7 +152,7 @@ const ChatGPTLikeComponent = () => {
 
       recognitionRef.current.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
-        setInput((prev) => prev + " " + transcript);
+        setInput((prev) => (prev + " " + transcript).trim());
       };
 
       recognitionRef.current.onerror = () => setIsRecording(false);
@@ -129,9 +168,14 @@ const ChatGPTLikeComponent = () => {
     setIsRecording(!isRecording);
   };
 
+  const getCurrentMessages = () =>
+    currentChatIndex !== null && chatList[currentChatIndex]
+      ? chatList[currentChatIndex].messages
+      : [];
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.curvedBackground}></div>
+      {/* SIDEBAR */}
       {(sidebarOpen || closingSidebar) && (
         <div
           className={clsx(
@@ -142,55 +186,88 @@ const ChatGPTLikeComponent = () => {
         >
           <div className={styles.sidebarHeader}>
             <h2>ChatGPT</h2>
-            <button className={styles.toggleBtn} onClick={toggleSidebar}>
+            <button
+              className={styles.toggleBtn}
+              onClick={toggleSidebar}
+              aria-label="Close sidebar"
+            >
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
           </div>
 
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="Search chats"
-            onChange={handleSearch}
-          />
-
-          <button
-            className={styles.newChat}
-            onClick={() => setCurrentChatIndex(null)}
-          >
-            + New Chat
+          <button className={styles.newChat} onClick={handleNewChat}>
+            <FontAwesomeIcon icon={faPlus} /> New Chat
           </button>
 
+          <div className={styles.searchContainer}>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Search chats"
+              onChange={handleSearch}
+              value={searchQuery}
+            />
+          </div>
+
           <div className={styles.chatList}>
-            {filteredChats.map((chat, i) => (
-              <div key={i} className={styles.chatItem}>
-                {renamingIndex === i ? (
-                  <input
-                    autoFocus
-                    value={chat.name}
-                    onChange={(e) => handleRename(i, e.target.value)}
-                    onBlur={() => setRenamingIndex(null)}
-                  />
-                ) : (
-                  <span
-                    onClick={() => setCurrentChatIndex(i)}
-                    className={styles.chatName}
-                  >
-                    {chat.name}
-                  </span>
-                )}
-                <div className={styles.dots}>
-                  <FontAwesomeIcon icon={faEllipsisVertical} />
-                  <div className={styles.dropdown}>
-                    <div onClick={() => setRenamingIndex(i)}>Rename</div>
-                    <div onClick={() => handleDelete(i)}>Delete</div>
-                    <div onClick={() => alert("Share: " + chat.name)}>
-                      Share
-                    </div>
-                  </div>
+            {filteredChats.map((chat, i) => {
+              const originalIndex = chatList.findIndex((c) => c === chat);
+              return (
+                <div
+                  key={originalIndex}
+                  className={clsx(
+                    styles.chatItem,
+                    currentChatIndex === originalIndex && styles.active
+                  )}
+                >
+                  {renamingIndex === originalIndex ? (
+                    <input
+                      autoFocus
+                      value={chat.name}
+                      onChange={(e) => {
+                        const updated = [...chatList];
+                        updated[originalIndex].name = e.target.value;
+                        setChatList(updated);
+                      }}
+                      onBlur={() => handleRename(originalIndex, chat.name)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleRename(originalIndex, chat.name);
+                        } else if (e.key === "Escape") {
+                          setRenamingIndex(null);
+                        }
+                      }}
+                      className={styles.renameInput}
+                    />
+                  ) : (
+                    <>
+                      <span
+                        onClick={() => handleChatSelect(originalIndex)}
+                        className={styles.chatName}
+                      >
+                        {chat.name}
+                      </span>
+                      <div className={styles.dots}>
+                        <FontAwesomeIcon icon={faEllipsisVertical} />
+                        <div className={styles.dropdown}>
+                          <div onClick={() => setRenamingIndex(originalIndex)}>
+                            <FontAwesomeIcon icon={faPencil} /> Rename
+                          </div>
+                          <div onClick={() => handleDelete(originalIndex)}>
+                            <FontAwesomeIcon icon={faTrash} /> Delete
+                          </div>
+                          <div
+                            onClick={() => alert("Share: " + chat.name)}
+                          >
+                            <FontAwesomeIcon icon={faShare} /> Share
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -198,7 +275,11 @@ const ChatGPTLikeComponent = () => {
       {/* CHAT SECTION */}
       <div className={styles.chatSection}>
         {!sidebarOpen && (
-          <button className={styles.toggleBtnOpen} onClick={toggleSidebar}>
+          <button
+            className={styles.toggleBtnOpen}
+            onClick={toggleSidebar}
+            aria-label="Open sidebar"
+          >
             <FontAwesomeIcon icon={faChevronRight} />
           </button>
         )}
@@ -211,38 +292,37 @@ const ChatGPTLikeComponent = () => {
             </div>
           )}
 
-          {currentChatIndex !== null &&
-            chatList[currentChatIndex]?.messages?.map((msg, idx) => (
-              <div
-                key={idx}
-                className={`${styles.message} ${styles[msg.from]}`}
-              >
-                <div className={styles.bubble}>{msg.text}</div>
-              </div>
-            ))}
+          {getCurrentMessages().map((msg, idx) => (
+            <div
+              key={idx}
+              className={`${styles.message} ${styles[msg.from]}`}
+            >
+              <div className={styles.bubble}>{msg.text}</div>
+            </div>
+          ))}
 
           {typing && currentChatIndex !== null && (
             <div className={`${styles.message} ${styles.bot}`}>
               <div className={styles.bubble}>
                 <span className={styles.typingDots}>
-                  <span>.</span>
-                  <span>.</span>
-                  <span>.</span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </span>
               </div>
             </div>
           )}
-
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Area */}
+        {/* INPUT AREA */}
         <form className={styles.inputArea} onSubmit={handleSend}>
           <div className={styles.inputWrapper}>
             <button
               type="button"
               className={styles.mediaBtn}
               onClick={() => document.getElementById("fileUpload").click()}
+              aria-label="Attach file"
             >
               <FontAwesomeIcon icon={faFolderPlus} />
             </button>
@@ -256,11 +336,13 @@ const ChatGPTLikeComponent = () => {
             />
 
             <input
+              ref={inputRef}
               type="text"
               placeholder="Send a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               className={styles.input}
+              disabled={typing}
             />
 
             <button
@@ -270,11 +352,17 @@ const ChatGPTLikeComponent = () => {
               }`}
               onClick={handleMicClick}
               title={isRecording ? "Stop recording" : "Start recording"}
+              aria-label={isRecording ? "Stop recording" : "Start recording"}
             >
               <FontAwesomeIcon icon={faMicrophoneLines} />
             </button>
 
-            <button type="submit" className={styles.sendBtn}>
+            <button
+              type="submit"
+              className={styles.sendBtn}
+              disabled={!input.trim() || typing}
+              aria-label="Send message"
+            >
               <FontAwesomeIcon icon={faLocationArrow} />
             </button>
           </div>
