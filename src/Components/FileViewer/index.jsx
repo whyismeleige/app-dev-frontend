@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./index.module.css";
+import Loader from "../../Utils/Loader";
+
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const getExtension = (filename) => filename.split(".").pop().toLowerCase();
@@ -60,7 +62,9 @@ export default function FileViewer(props) {
       </div>
 
       {loading ? (
-        <div className={styles.loader}>Loading preview...</div>
+        <div className={styles.loader}>
+          <Loader />
+        </div>
       ) : (
         <div className={styles.iframeContainer}>{renderFile(fileName, blobURL)}</div>
       )}

@@ -135,12 +135,16 @@ export const LoginForm = (props) => {
           </div>
 
           <button
-            type="submit"
-            className={styles.loginButton}
-            disabled={loading ? true : false}
-          >
-            {loading ? <Loader /> : formStep === 1 ? "Login" : "Verify OTP"}
-          </button>
+             type="submit"
+              className={styles.loginButton}
+                disabled={loading}
+                    >
+                {loading ? (
+                  <div className={styles.loaderSpinner}>
+                    <Loader />
+                  </div>
+                ) : formStep === 1 ? "Login" : "Verify OTP"}
+            </button>
 
           {formStep === 1 && (
             <div className={styles.registerLink}>
